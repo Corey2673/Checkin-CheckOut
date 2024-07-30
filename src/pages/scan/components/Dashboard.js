@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import AddVendor from "../../components/forms/AddVendorForm.js";
+import AddProcessChange from "../../components/forms/AddProcessChange.js";
+
 import AddUser from "./AddUser";
 import StatusTable from "../../components/Tables/ShowOnsiteStaff.js";
 import TEST from "./test.js";
@@ -77,7 +79,6 @@ const Dashboard = () => {
                   </button>
                 </li>
               </>
-
               {isLoggedIn && (
                 <li className="mb-4">
                   <button
@@ -88,7 +89,6 @@ const Dashboard = () => {
                   </button>
                 </li>
               )}
-
               {isLoggedIn && (
                 <li className="mb-4">
                   <button
@@ -96,6 +96,16 @@ const Dashboard = () => {
                     onClick={() => handleComponentChange("safetyQuestions")}
                   >
                     <span>Safety Questions</span>
+                  </button>
+                </li>
+              )}
+              {isLoggedIn && (
+                <li className="mb-4">
+                  <button
+                    className="flex items-center text-white p-2 rounded-md hover:bg-gray-700 focus:outline-none"
+                    onClick={() => handleComponentChange("processChange")}
+                  >
+                    <span>Process Change</span>
                   </button>
                 </li>
               )}
@@ -110,7 +120,6 @@ const Dashboard = () => {
                   </button>
                 </li>
               )}
-
               {isLoggedIn ? (
                 <li className="mb-4">
                   <button
@@ -161,6 +170,7 @@ const Dashboard = () => {
 
             {activeComponent === "safetyQuestions" && <SafetyQuestions />}
             {activeComponent === "exportData" && <CSVExport />}
+            {activeComponent === "processChange" && <AddProcessChange />}
           </>
         )}
       </main>

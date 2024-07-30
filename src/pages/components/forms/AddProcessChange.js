@@ -2,40 +2,34 @@ import React, { useState, useEffect } from "react";
 import autoID from "../../utils/autoID";
 import dateFormat from "../../utils/dateFormat";
 
-const RegisterForm = () => {
+const ProcessChangeForm = () => {
   const initialFormData = {
-    questionID: "",
-    title: "",
+    processID: "",
     text: "",
     role: "",
     siteLocation: "",
-    questionType: "",
     createAT: "",
-    comments: "",
-    userReply: "", // New state to capture user reply
   };
 
-  // Load questions from localStorage on component mount
   useEffect(() => {
-    const storedQuestions =
-      JSON.parse(localStorage.getItem("safety_questions")) || [];
-    setQuestions(storedQuestions);
+    const storedAcknowledgements =
+      JSON.parse(localStorage.getItem("process_changes")) || [];
+    setAcknowledgements(storedAcknowledgements);
   }, []);
 
   const [formData, setFormData] = useState(initialFormData);
-  const [questions, setQuestions] = useState([]);
-  const [showUserReply, setShowUserReply] = useState(false); // State to manage user reply input field visibility
+  const [acknowledgements, setAcknowledgements] = useState([]);
+  const [showUserReply, setShowUserReply] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Toggle user reply input field visibility based on comments selection
     if (name === "comments") {
       setFormData({
         ...formData,
         [name]: value,
       });
-      setShowUserReply(value === "Yes"); // Show input field if comments is "Yes"
+      setShowUserReply(value === "Yes");
     } else {
       setFormData({
         ...formData,
@@ -45,43 +39,45 @@ const RegisterForm = () => {
   };
 
   const handleSave = () => {
-    // Add new question to state
     const updatedFormData = {
       ...formData,
-      questionID: autoID(),
+      processID: autoID(),
       createAT: dateFormat(),
     };
 
-    const updatedQuestions = [...questions, updatedFormData];
+    const updatedAcknowledgements = [...acknowledgements, updatedFormData];
 
-    setQuestions(updatedQuestions);
-
-    // Save updated questions to localStorage
-    localStorage.setItem("safety_questions", JSON.stringify(updatedQuestions));
-
-    // Clear the form after saving
-    setFormData(initialFormData);
-    setShowUserReply(false); // Hide user reply input field after saving
-  };
-
-  const handleDelete = (questionID) => {
-    // Remove question from state
-    const updatedQuestions = questions.filter(
-      (q) => q.questionID !== questionID
+    setAcknowledgements(updatedAcknowledgements);
+    localStorage.setItem(
+      "process_changes",
+      JSON.stringify(updatedAcknowledgements)
     );
-    setQuestions(updatedQuestions);
 
-    // Save updated questions to localStorage
-    localStorage.setItem("safety_questions", JSON.stringify(updatedQuestions));
+    setFormData(initialFormData);
+    setShowUserReply(false);
   };
 
-  const moveQuestion = (index, direction) => {
-    const newQuestions = [...questions];
-    const [movedQuestion] = newQuestions.splice(index, 1);
-    newQuestions.splice(index + direction, 0, movedQuestion);
+  const handleDelete = (procesID) => {
+    const updatedAcknowledgements = acknowledgements.filter(
+      (ack) => ack.procesID !== procesID
+    );
+    setAcknowledgements(updatedAcknowledgements);
+    localStorage.setItem(
+      "process_changes",
+      JSON.stringify(updatedAcknowledgements)
+    );
+  };
 
-    setQuestions(newQuestions);
-    localStorage.setItem("safety_questions", JSON.stringify(newQuestions));
+  const moveAcknowledgement = (index, direction) => {
+    const newAcknowledgements = [...acknowledgements];
+    const [movedAcknowledgement] = newAcknowledgements.splice(index, 1);
+    newAcknowledgements.splice(index + direction, 0, movedAcknowledgement);
+
+    setAcknowledgements(newAcknowledgements);
+    localStorage.setItem(
+      "process_changes",
+      JSON.stringify(newAcknowledgements)
+    );
   };
 
   return (
@@ -91,7 +87,7 @@ const RegisterForm = () => {
           <div className="overflow-hidden bg-white rounded-xl">
             <div className="px-6 sm:p-12">
               <h3 className="text-3xl font-semibold text-center text-gray-900">
-                Safety Question
+                Process Change
               </h3>
               <form className="mt-14">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
@@ -100,7 +96,7 @@ const RegisterForm = () => {
                       <textarea
                         name="text"
                         id="text"
-                        placeholder="Enter Safety Question"
+                        placeholder="Describe the Process Change"
                         value={formData.text}
                         onChange={handleChange}
                         className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md resize-y focus:outline-none focus:border-blue-600 caret-blue-600"
@@ -168,25 +164,27 @@ const RegisterForm = () => {
                     </select>
                   </div>
 
-                  <div className="mb-4 py-2">
-                    <label
-                      htmlFor="questionType"
-                      className="block text-gray-700"
-                    >
-                      Question Type:
-                    </label>
-                    <select
-                      id="questionType"
-                      name="questionType"
-                      value={formData.questionType}
-                      onChange={handleChange}
-                      className="border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                    >
-                      <option value="">Select</option>
-                      <option value="Once">Ask Once</option>
-                      <option value="Repeated">Repeated</option>
-                    </select>
-                  </div>
+                  {/* {showUserReply && (
+                    <div className="sm:col-span-2">
+                      <label
+                        htmlFor="userReply"
+                        className="text-base font-medium text-gray-900"
+                      >
+                        User Reply
+                      </label>
+                      <div className="mt-2.5 relative">
+                        <textarea
+                          name="userReply"
+                          id="userReply"
+                          placeholder="Enter your reply"
+                          value={formData.userReply}
+                          onChange={handleChange}
+                          className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md resize-y focus:outline-none focus:border-blue-600 caret-blue-600"
+                          rows="4"
+                        ></textarea>
+                      </div>
+                    </div>
+                  )} */}
 
                   <div className="sm:col-span-2">
                     <button
@@ -194,7 +192,7 @@ const RegisterForm = () => {
                       onClick={handleSave}
                       type="button"
                     >
-                      Save Data
+                      Submit
                     </button>
                   </div>
                 </div>
@@ -204,33 +202,33 @@ const RegisterForm = () => {
         </div>
         <div className="mt-8">
           <h3 className="text-2xl font-semibold text-center text-gray-900">
-            Saved Safety Questions
+            Saved Process Change Acknowledgements
           </h3>
           <ul className="mt-4">
-            {questions.map((question, index) => (
+            {acknowledgements.map((ack, index) => (
               <li
-                key={question.questionID}
+                key={ack.procesID}
                 className="flex items-center justify-between py-2 px-4 bg-gray-200 rounded-md mb-2"
               >
-                <span>{question.text}</span>
+                <span>{ack.text}</span>
                 <div className="flex space-x-2">
                   <button
                     className="text-blue-600 hover:text-blue-700"
-                    onClick={() => moveQuestion(index, -1)}
+                    onClick={() => moveAcknowledgement(index, -1)}
                     disabled={index === 0}
                   >
                     Up
                   </button>
                   <button
                     className="text-blue-600 hover:text-blue-700"
-                    onClick={() => moveQuestion(index, 1)}
-                    disabled={index === questions.length - 1}
+                    onClick={() => moveAcknowledgement(index, 1)}
+                    disabled={index === acknowledgements.length - 1}
                   >
                     Down
                   </button>
                   <button
                     className="text-red-600 hover:text-red-700"
-                    onClick={() => handleDelete(question.questionID)}
+                    onClick={() => handleDelete(ack.procesID)}
                   >
                     Delete
                   </button>
@@ -244,4 +242,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ProcessChangeForm;

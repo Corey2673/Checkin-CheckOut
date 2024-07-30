@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import ProfileComfirm from "../forms/ProfileComfirm";
 import Departure from "./departure";
 import "../../utils/styles.css";
-import FaceRecognition from "./FaceRecognition";
 
 const RegisterForm = (props) => {
   const [allUsers, setAllUsers] = useState([]);
