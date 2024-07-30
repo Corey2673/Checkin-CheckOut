@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import autoID from "../../utils/autoID";
 import dateFormat from "../../utils/dateFormat";
+import { format } from "date-fns";
 
 const VendorForm = () => {
   const initialFormData = {
+    userID: "",
+    clockID: "",
     firstname: "",
     lastname: "",
     phone: "",
@@ -16,23 +19,13 @@ const VendorForm = () => {
     escort: "",
     siteLocation: "",
     departureTime: "",
-
-    LOGIN_ID: "",
-    SP_CODE: "",
-    NANCODE: "",
-    ACTIVITY: "",
-    ATT_TYPE: "",
-    CUSTOMER_NAME: "",
-    LINE_NO: "",
-    OT_ID: "",
-    CUSTOMER_NAME: "",
-    TEAM_NAME: "",
   };
 
   const [escort, setEscort] = useState(""); // State for escort
   const [escorts, setEscorts] = useState([]); // State for escort dropdown options
-  const [siteLocation, setSiteLocation] = useState([]); // State for escort dropdown options
+  const [siteLocation, setSiteLocation] = useState([]); // State for site location dropdown options
   const [departureTime, setDepartureTime] = useState("");
+
   useEffect(() => {
     const existingClockActions =
       JSON.parse(localStorage.getItem("clock_data")) || [];
@@ -43,6 +36,7 @@ const VendorForm = () => {
     setEscorts(uniqueEscorts);
     setSiteLocation(["Vehicle Plant", "Battery Plant"]);
   }, []);
+
   // Load vendors from localStorage on component mount
   useEffect(() => {
     const storedVendors = JSON.parse(localStorage.getItem("users")) || [];
@@ -59,23 +53,35 @@ const VendorForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "departureTime") {
+      const formattedTime = format(
+        new Date(`1970-01-01T${value}:00`),
+        "hh:mm aa"
+      );
+      setDepartureTime(formattedTime);
+      setFormData({
+        ...formData,
+        [name]: formattedTime,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSave = () => {
     // Set userID before saving
     const updatedFormData = {
       ...formData,
+      clockID: autoID(),
       userID: autoID(),
       createAT: dateFormat(),
       timestampOUT: null,
       timestampIN: dateFormat(),
       siteLocation: selectedSiteLocation,
       escort: escort,
-      departureTime: departureTime,
     };
     const existingClockActions =
       JSON.parse(localStorage.getItem("clock_data")) || [];
@@ -88,6 +94,7 @@ const VendorForm = () => {
 
     // Clear the form after saving
     setFormData(initialFormData);
+    window.location.reload();
   };
 
   const handleClear = () => {
@@ -104,16 +111,6 @@ const VendorForm = () => {
     localStorage.setItem("users", JSON.stringify(updatedVendors));
   };
 
-  const handleEdit = (index) => {
-    // Set form data to edit user
-    const userToEdit = vendors[index];
-    setFormData({ ...userToEdit });
-  };
-
-  const toggleShowVendors = () => {
-    setShowVendors(!showVendors);
-  };
-
   return (
     <section className="bg-white">
       <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -124,7 +121,7 @@ const VendorForm = () => {
             </h2>
 
             <hr className="mt-5 mb-5 border-gray-200" />
-            <div className="space-y-5 ">
+            <div className="space-y-5">
               <div>
                 <label
                   htmlFor="firstname"
@@ -251,79 +248,76 @@ const VendorForm = () => {
                     value={escort}
                     onChange={(e) => setEscort(e.target.value)}
                     className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                    required
                   >
-                    <option value="" disabled>
-                      Select Escort
-                    </option>
-                    {escorts.map((escortName) => (
-                      <option value={escortName}>{escortName}</option>
+                    <option value="">Select Escort</option>
+                    {escorts.map((escort, index) => (
+                      <option key={index} value={escort}>
+                        {escort}
+                      </option>
                     ))}
                   </select>
                 </div>
               </div>
-              <div className="mt-6 mb-6">
-                <label
-                  htmlFor="departure-time"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
-                  Expected Departure Time
-                </label>
-                <input
-                  id="departure-time"
-                  type="time"
-                  placeholder="Expected Departure Time"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={departureTime}
-                  onChange={(e) => setDepartureTime(e.target.value)}
-                />
-              </div>
-              <hr className="ext-base font-medium text-gray-900 mt-5 mb-5 border-gray-200" />
-              {selectedSiteLocation ? (
-                <p>
-                  <div className="mt-2.5">
-                    Selected Location: {selectedSiteLocation}
-                  </div>
-                </p>
-              ) : (
-                <p>Select Location</p>
-              )}
 
-              <div class="flex justify-center space-x-8 rounded-lg px-8 pb-8">
-                <div class="font-semibold tracking-tight text-gray-550">
-                  <div class="mt-8">
-                    <button
-                      onClick={(e) => handleSiteLocationChange("Vehicle Plant")}
-                      class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
-                      role="button"
-                    >
-                      Vehicle Plant
-                    </button>
-                  </div>
-                </div>
-
-                <div class="font-semibold tracking-tight text-gray-550">
-                  <div class="mt-8">
-                    <button
-                      title=""
-                      value="Battery Plant"
-                      onClick={(e) => handleSiteLocationChange("Battery Plant")}
-                      class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
-                      role="button"
-                    >
-                      Battery Plant
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <hr className="mt-5 mb-5 border-gray-200" />
               <div>
-                <button
-                  onClick={handleSave}
-                  className="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700"
+                <label
+                  htmlFor="siteLocation"
+                  className="text-base font-medium text-gray-900"
                 >
-                  Submit
+                  Site Location
+                </label>
+                <div className="mt-2.5">
+                  <select
+                    name="siteLocation"
+                    value={selectedSiteLocation}
+                    onChange={(e) => handleSiteLocationChange(e.target.value)}
+                    className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                  >
+                    <option value="">Select Site Location</option>
+                    {siteLocation.map((location, index) => (
+                      <option key={index} value={location}>
+                        {location}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="departureTime"
+                  className="text-base font-medium text-gray-900"
+                >
+                  Departure Time
+                </label>
+                <div className="mt-2.5">
+                  <input
+                    type="time"
+                    name="departureTime"
+                    value={departureTime}
+                    onChange={handleChange}
+                    placeholder="Enter Departure Time"
+                    className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                  />
+                </div>
+              </div>
+
+              <hr className="mt-16 mb-10 border-gray-200" />
+
+              <div className="flex items-center justify-between mt-6">
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="px-4 py-2 font-semibold text-red-600 transition-all duration-200 bg-transparent border border-red-600 rounded-md hover:bg-red-600 hover:text-white"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="px-4 py-2 font-semibold text-white transition-all duration-200 bg-blue-600 border border-blue-600 rounded-md hover:bg-transparent hover:text-blue-600"
+                >
+                  Save
                 </button>
               </div>
             </div>

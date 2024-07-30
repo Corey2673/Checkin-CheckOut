@@ -63,7 +63,7 @@ const RegisterForm = (props) => {
         </h1>
         {/* <FaceRecognition /> */}
         <input
-          type="text"
+          type="password"
           placeholder="Enter Badge ID"
           value={searchBadgeID}
           onChange={handleSearchChange}

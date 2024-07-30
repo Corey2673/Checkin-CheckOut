@@ -75,6 +75,15 @@ const RegisterForm = (props) => {
     localStorage.setItem("safety_questions", JSON.stringify(updatedQuestions));
   };
 
+  const moveQuestion = (index, direction) => {
+    const newQuestions = [...questions];
+    const [movedQuestion] = newQuestions.splice(index, 1);
+    newQuestions.splice(index + direction, 0, movedQuestion);
+
+    setQuestions(newQuestions);
+    localStorage.setItem("safety_questions", JSON.stringify(newQuestions));
+  };
+
   return (
     <section className="py-10 bg-gray-100">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
@@ -165,26 +174,6 @@ const RegisterForm = (props) => {
                     </select>
                   </div>
 
-                  {/* Conditional rendering of user reply input field */}
-                  {showUserReply && (
-                    <div className="mb-4 py-2">
-                      <label
-                        htmlFor="userReply"
-                        className="block text-gray-700"
-                      >
-                        User Reply:
-                      </label>
-                      <input
-                        type="text"
-                        id="userReply"
-                        name="userReply"
-                        value={formData.userReply}
-                        onChange={handleChange}
-                        className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
-                      />
-                    </div>
-                  )}
-
                   <div className="mb-4 py-2">
                     <label
                       htmlFor="questionType"
@@ -209,6 +198,7 @@ const RegisterForm = (props) => {
                     <button
                       className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
                       onClick={handleSave}
+                      type="button"
                     >
                       Save Data
                     </button>
@@ -229,12 +219,28 @@ const RegisterForm = (props) => {
                 className="flex items-center justify-between py-2 px-4 bg-gray-200 rounded-md mb-2"
               >
                 <span>{question.text}</span>
-                <button
-                  className="text-red-600 hover:text-red-700"
-                  onClick={() => handleDelete(question.questionID)}
-                >
-                  Delete
-                </button>
+                <div className="flex space-x-2">
+                  <button
+                    className="text-blue-600 hover:text-blue-700"
+                    onClick={() => moveQuestion(index, -1)}
+                    disabled={index === 0}
+                  >
+                    Up
+                  </button>
+                  <button
+                    className="text-blue-600 hover:text-blue-700"
+                    onClick={() => moveQuestion(index, 1)}
+                    disabled={index === questions.length - 1}
+                  >
+                    Down
+                  </button>
+                  <button
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => handleDelete(question.questionID)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

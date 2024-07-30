@@ -9,20 +9,33 @@ import CSVExport from "../../components/Tables/ShowExports.js";
 const Dashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeComponent, setActiveComponent] = useState("test");
+  const [showModal, setShowModal] = useState(false);
+  const [password, setPassword] = useState("");
 
   const handleComponentChange = (component) => {
     setActiveComponent(component);
   };
 
   const handleLogin = () => {
-    // Perform login actions here (e.g., set authentication state)
-    setIsLoggedIn(true);
+    // Open modal for password input
+    setShowModal(true);
+  };
+
+  const handlePasswordSubmit = () => {
+    // Replace 'yourPassword' with the actual password you want to use
+    if (password === "safetyAdmin") {
+      setIsLoggedIn(true);
+      setShowModal(false);
+    } else {
+      alert("Incorrect password");
+    }
+
+    setPassword("");
   };
 
   const handleLogout = () => {
-    // Perform logout actions here (e.g., reset authentication state)
     setIsLoggedIn(false);
-    setActiveComponent("test"); // Reset active component on logout
+    setActiveComponent("test");
   };
 
   return (
@@ -52,7 +65,7 @@ const Dashboard = () => {
                     className="flex items-center text-white p-2 rounded-md hover:bg-gray-700 focus:outline-none"
                     onClick={() => handleComponentChange("statusTable")}
                   >
-                    <span>Resorces Onsite</span>
+                    <span>Resources Onsite</span>
                   </button>
                 </li>
                 <li className="mb-4">
@@ -151,6 +164,35 @@ const Dashboard = () => {
           </>
         )}
       </main>
+
+      {/* Modal for password input */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md">
+            <h2 className="mb-4 text-lg font-semibold">Enter Admin Password</h2>
+            <input
+              type="password"
+              className="w-full p-2 mb-4 border border-gray-300 rounded-md"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div className="flex justify-end">
+              <button
+                className="px-4 py-2 mr-2 bg-gray-300 rounded-md"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                onClick={handlePasswordSubmit}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

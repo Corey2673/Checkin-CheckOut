@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 
-const CAT2Export = () => {
+const OnsiteExport = () => {
   const [clockData, setClockData] = useState([]);
   const [selectedFields, setSelectedFields] = useState({
-    PAYROLL_NO: true,
-    LOGIN_ID: true,
-    SP_CODE: true,
-    NANCODE: true,
-    ACTIVITY: true,
-    ATT_TYPE: true,
-    CAL_DATE: true,
-    DURATION: true,
-    CUSTOMER_NAME: true,
+    firstname: true,
+    lastname: true,
+    siteLocation: true,
+    role: true,
+    timestampIN: true,
+    phone: true,
+    departureTime: true,
+    escort: true,
   });
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const CAT2Export = () => {
   };
 
   const getFilteredData = () => {
-    return FilterFTEUsers().map((user) => {
+    return clockData.map((user) => {
       const filteredUser = {};
       Object.keys(selectedFields).forEach((field) => {
         if (selectedFields[field]) {
@@ -71,7 +70,7 @@ const CAT2Export = () => {
       </div> */}
       <CSVLink
         data={getFilteredData()}
-        filename={"CAT2_FTE_REPORT.csv"}
+        filename={"CURRENT_ONSITE.csv"}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download
@@ -80,4 +79,4 @@ const CAT2Export = () => {
   );
 };
 
-export default CAT2Export;
+export default OnsiteExport;

@@ -1,6 +1,8 @@
 import React from "react";
 import CSVExportButton from "../buttons/ExportButton.js";
 import CAT2Report from "../buttons/CAT2ExportButton.js";
+import OnsiteExport from "../buttons/OnsiteExport.js";
+import SafetyAckExport from "../buttons/SafetyAckExport.js";
 
 const App = () => {
   return (
@@ -10,7 +12,7 @@ const App = () => {
           <div>
             <div class="relative flex items-center justify-center mx-auto"></div>
             <h3 class="mt-8 text-lg font-semibold text-black">
-              Safety Questions
+              Process Acknowledgment
             </h3>
 
             <p class="mt-4 text-base text-gray-600">
@@ -28,10 +30,7 @@ const App = () => {
             </h3>
 
             <p class="mt-4 text-base text-gray-600">
-              <CSVExportButton
-                dataSet={"acknowledgements"}
-                fileName={"acknowledgements"}
-              />
+              <SafetyAckExport />
             </p>
           </div>
 
@@ -43,10 +42,7 @@ const App = () => {
             </h3>
 
             <p class="mt-4 text-base text-gray-600">
-              <CSVExportButton
-                dataSet={"clock_data"}
-                fileName={"currently_onsite"}
-              />
+              <OnsiteExport />
             </p>
           </div>
 

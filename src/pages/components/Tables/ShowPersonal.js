@@ -1,56 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-const RegisterForm = (props) => {
-  const [allUsers, setAllUsers] = useState(() => {
-    const storedUsers = localStorage.getItem("users");
-    return storedUsers ? JSON.parse(storedUsers) : [];
-  });
-
-  const [editingUser, setEditingUser] = useState({
-    firstname: "",
-    lastname: "",
-    role: "",
-    employeeID: "",
-    id: "",
-    employeestatus: "",
-  });
+const ShowPersonal = () => {
+  const [allUsers, setAllUsers] = useState([]);
+  const [editingUser, setEditingUser] = useState({});
 
   const editUser = (user) => {
     setEditingUser(user);
   };
 
-  const updateUser = () => {
-    if (
-      editingUser &&
-      editingUser.firstname &&
-      editingUser.lastname &&
-      editingUser.employeeID &&
-      editingUser.employeestatus
-    ) {
-      // Logic to update user in local storage
-      const updatedUsers = allUsers.map((user) =>
-        user.id === editingUser.id ? editingUser : user
-      );
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-      setEditingUser({
-        firstname: "",
-        lastname: "",
-        role: "",
-        employeeID: "",
-        id: "",
-        employeestatus: "",
-      });
-      setAllUsers(updatedUsers);
-    }
-  };
-
   useEffect(() => {
-    const fetchUsers = () => {
-      // Fetch users from local storage
-      const storedUsers = localStorage.getItem("users");
-      if (storedUsers) {
-        setAllUsers(JSON.parse(storedUsers));
+    const fetchUsers = async () => {
+      try {
+        const storedUsers = localStorage.getItem("users");
+        if (storedUsers) {
+          setAllUsers(JSON.parse(storedUsers));
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
       }
     };
 
@@ -59,9 +25,6 @@ const RegisterForm = (props) => {
 
   return (
     <div className="w-full px-12 py-4">
-      {/* <h2 className="text-center text-2xl font-bold tracking-wide text-gray-800">
-        Create Personal
-      </h2> */}
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
         {allUsers.map((user) => (
           <div
@@ -75,7 +38,7 @@ const RegisterForm = (props) => {
                 </h2>
                 <p className="text-sm text-gray-600 mb-2">{user.role}</p>
                 <p className="text-sm text-gray-600 mb-2">
-                  Badge ID: {user.employeeID}
+                  Badge ID: {user.PAYROLL_NO}
                 </p>
                 <p className="text-sm text-gray-600 mb-2">
                   {user.employeestatus}

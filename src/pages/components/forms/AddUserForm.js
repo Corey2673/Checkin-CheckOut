@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AutoID from "../../utils/autoID";
 import dateFormat from "../../utils/dateFormat";
-import getInitials from "../../utils/getInitials";
+
 import avatarColor from "../../utils/avatarColor";
 
 const UserForm = () => {
@@ -12,12 +12,11 @@ const UserForm = () => {
     phone: "",
     emergencycontactname: "",
     emergencycontactnumber: "",
-    employeeID: "",
+    PAYROLL_NO: "",
     badgeID: "",
     role: "",
     employeestatus: "",
     createAT: "",
-
     LOGIN_ID: "",
     SP_CODE: "",
     NANCODE: "",
@@ -36,9 +35,13 @@ const UserForm = () => {
   const [filterRole, setFilterRole] = useState("");
   const [avatarColors, setAvatarColors] = useState([]); // State to manage role filter
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [editing, setEditing] = useState(false); // State to track if we're editing a user
+  const [editingIndex, setEditingIndex] = useState(null); // State to track the index of the user being edited
+
   const toggleShowUsers = () => {
     setShowUsers(!showUsers);
   };
+
   // Load users from localStorage on component mount
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
@@ -59,39 +62,77 @@ const UserForm = () => {
   };
 
   const handleSave = () => {
-    // Set badgeID to employeeID before saving
-    const updatedFormData = {
-      ...formData,
-      badgeID: formData.employeeID,
-      userID: AutoID(),
-      createAT: dateFormat(),
-    };
+    if (editing) {
+      // Update the user data
+      const updatedUser = {
+        ...formData,
+        badgeID: formData.PAYROLL_NO,
+        createAT: dateFormat(),
+      };
+      const updatedUsers = [...users];
+      updatedUsers[editingIndex] = updatedUser;
 
-    // Add new user to state
-    const updatedUsers = [...users, updatedFormData];
-    setUsers(updatedUsers);
+      // Update local storage
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
 
-    // Save updated users to localStorage
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
+      // Update the state
+      setUsers(updatedUsers);
 
-    // Clear the form after saving
-    setFormData(initialFormData);
+      // Clear the form
+      setFormData(initialFormData);
+      setEditing(false);
+      setEditingIndex(null);
+    } else {
+      // Create a new user
+      const newUser = {
+        ...formData,
+
+        createAT: dateFormat(),
+        userID: AutoID(),
+      };
+      const updatedUsers = [...users, newUser];
+
+      // Update local storage
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+      // Update the state
+      setUsers(updatedUsers);
+
+      // Clear the form
+      setFormData(initialFormData);
+    }
   };
 
   const handleClear = () => {
     setFormData(initialFormData); // Clear the form
   };
+  const DateTimeSeparator = () => {
+    const dateTimeString = "07/12/2024, 11:48 AM";
 
+    // Split the date and time
+    const [date, time] = dateTimeString.split(", ");
+
+    return (
+      <div>
+        <p>Date: {date}</p>
+        <p>Time: {time}</p>
+      </div>
+    );
+  };
   const handleDelete = (index) => {
     const updatedUsers = users.filter((_, i) => i !== index);
     setUsers(updatedUsers);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
+    //window.location.reload();
   };
 
   const handleEdit = (index) => {
     // Set form data to edit user
     const userToEdit = users[index];
     setFormData({ ...userToEdit });
+    setEditing(true);
+    setEditingIndex(index);
+    console.log(userToEdit);
   };
 
   const filteredUsers = filterRole
@@ -141,159 +182,6 @@ const UserForm = () => {
                 All User Accounts
               </h2>
             </div>
-
-            <svg
-              class="w-auto h-4 mx-auto mt-8 text-gray-300 lg:mt-12"
-              viewBox="0 0 172 16"
-              fill="none"
-              stroke="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 11 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 46 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 81 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 116 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 151 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 18 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 53 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 88 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 123 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 158 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 25 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 60 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 95 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 130 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 165 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 32 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 67 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 102 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 137 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 172 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 39 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 74 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 109 1)"
-              />
-              <line
-                y1="-0.5"
-                x2="18.0278"
-                y2="-0.5"
-                transform="matrix(-0.5547 0.83205 0.83205 0.5547 144 1)"
-              />
-            </svg>
           </div>
 
           <div class="-my-4">
@@ -334,7 +222,7 @@ const UserForm = () => {
                             {user.employeestatus}
                           </p>
                           <p class="mt-2 text-sm  text-gray-900 sm:mt-3 sm:text-lg md:text-xl font-pj">
-                            Employee ID: {user.employeeID}
+                            PAYROLL_NO: {user.PAYROLL_NO}
                           </p>
                           <p class="mt-4 text-sm  text-gray-900 sm:mt-7 sm:text-lg md:text-xl font-pj">
                             <button
@@ -375,9 +263,6 @@ const UserForm = () => {
 
             <hr className="mt-5 mb-5 border-gray-200" />
             <div className="space-y-5">
-              {/* Your existing fields */}
-              {/* ... */}
-              {/* Additional fields for CAT2 Reporting */}
               <div>
                 <label
                   htmlFor="firstname"
@@ -418,18 +303,36 @@ const UserForm = () => {
               <hr className="mt-16 mb-10 border-gray-200" />
               <div>
                 <label
-                  htmlFor="employeeID"
+                  htmlFor="PAYROLL_NO"
                   className="text-base font-medium text-gray-900"
                 >
-                  Payroll ID
+                  Payroll No
                 </label>
                 <div className="mt-2.5">
                   <input
                     type="text"
-                    name="employeeID"
-                    value={formData.employeeID}
+                    name="PAYROLL_NO"
+                    value={formData.PAYROLL_NO}
                     onChange={handleChange}
-                    placeholder="Enter Empolyee Number"
+                    placeholder="Enter Payroll No"
+                    className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="badgeID"
+                  className="text-base font-medium text-gray-900"
+                >
+                  Badge ID
+                </label>
+                <div className="mt-2.5">
+                  <input
+                    type="text"
+                    name="badgeID"
+                    value={formData.badgeID}
+                    onChange={handleChange}
+                    placeholder="Enter Badge ID"
                     className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                   />
                 </div>
@@ -489,7 +392,7 @@ const UserForm = () => {
                     <div className="mt-2.5">
                       <input
                         type="text"
-                        name="Login_ID"
+                        name="LOGIN_ID"
                         value={formData.LOGIN_ID}
                         onChange={handleChange}
                         placeholder="Enter LOGIN_ID"
@@ -500,18 +403,18 @@ const UserForm = () => {
 
                   <div>
                     <label
-                      htmlFor="SP_Code"
+                      htmlFor="SP_CODE"
                       className="text-base font-medium text-gray-900"
                     >
-                      SP_Code
+                      SP_CODE
                     </label>
                     <div className="mt-2.5">
                       <input
                         type="text"
-                        name="SP_Code"
+                        name="SP_CODE"
                         value={formData.SP_CODE}
                         onChange={handleChange}
-                        placeholder="Enter SP_Code"
+                        placeholder="Enter SP_CODE"
                         className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                       />
                     </div>
@@ -521,7 +424,7 @@ const UserForm = () => {
                       htmlFor="NANCODE"
                       className="text-base font-medium text-gray-900"
                     >
-                      NANCode
+                      NANCODE
                     </label>
                     <div className="mt-2.5">
                       <input
@@ -529,7 +432,7 @@ const UserForm = () => {
                         name="NANCODE"
                         value={formData.NANCODE}
                         onChange={handleChange}
-                        placeholder="Enter NANCode"
+                        placeholder="Enter NANCODE"
                         className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                       />
                     </div>
@@ -540,7 +443,7 @@ const UserForm = () => {
                       htmlFor="ACTIVITY"
                       className="text-base font-medium text-gray-900"
                     >
-                      Activity
+                      ACTIVITY
                     </label>
                     <div className="mt-2.5">
                       <input
@@ -548,7 +451,7 @@ const UserForm = () => {
                         name="ACTIVITY"
                         value={formData.ACTIVITY}
                         onChange={handleChange}
-                        placeholder="Enter Activity"
+                        placeholder="Enter ACTIVITY"
                         className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                       />
                     </div>
@@ -559,7 +462,7 @@ const UserForm = () => {
                       htmlFor="ATT_TYPE"
                       className="text-base font-medium text-gray-900"
                     >
-                      ATT Type
+                      ATT_TYPE
                     </label>
                     <div className="mt-2.5">
                       <input
@@ -573,43 +476,6 @@ const UserForm = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="LINE_NO"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      Line No
-                    </label>
-                    <div className="mt-2.5">
-                      <input
-                        type="text"
-                        name="LINE_NO"
-                        value={formData.LINE_NO}
-                        onChange={handleChange}
-                        placeholder="Enter Line NO"
-                        className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="OT_ID"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      OT ID
-                    </label>
-                    <div className="mt-2.5">
-                      <input
-                        type="text"
-                        name="OT_ID"
-                        value={formData.OT_ID}
-                        onChange={handleChange}
-                        placeholder="Enter OT ID"
-                        className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                    </div>
-                  </div>
                   <div>
                     <label
                       htmlFor="CUSTOMER_NAME"
@@ -628,35 +494,24 @@ const UserForm = () => {
                       />
                     </div>
                   </div>
-
-                  <div>
-                    <label
-                      htmlFor="TEAM_NAME"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      Team Name
-                    </label>
-                    <div className="mt-2.5">
-                      <input
-                        type="text"
-                        name="TEAM_NAME"
-                        value={formData.TEAM_NAME}
-                        onChange={handleChange}
-                        placeholder="Enter Team Name"
-                        className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                    </div>
-                  </div>
-                  {/* Add more fields similarly */}
                 </>
               )}
               <div>
-                <button
-                  onClick={handleSave}
-                  className="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700"
-                >
-                  Create Account
-                </button>
+                {editing ? (
+                  <button
+                    onClick={handleSave}
+                    className="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700"
+                  >
+                    Edit Account
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleSave}
+                    className="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700"
+                  >
+                    Create Account
+                  </button>
+                )}
               </div>
               <div>
                 <button

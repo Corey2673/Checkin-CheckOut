@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dateFormat from "../../utils/dateFormat";
 import CSVExportButton from "../buttons/ExportButton.js";
+import OnsiteExport from "../buttons/OnsiteExport.js";
 
 const ActiveOnsitePersonnelDashboard = () => {
   // State to hold the onsite clock data
@@ -30,16 +31,6 @@ const ActiveOnsitePersonnelDashboard = () => {
       (selectedRole === "All" || entry.role === selectedRole)
   );
 
-  // utils/dateFormat.js
-  function formatTime(departureTime) {
-    const options = {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    };
-    return new Date().toLocaleString("en-US", options);
-  }
-
   const roles = [
     "All",
     "Shop Floor",
@@ -50,15 +41,15 @@ const ActiveOnsitePersonnelDashboard = () => {
   ];
 
   return (
-    <section className="py-10 bg-gray-100 sm:py-16 lg:py-24">
-      <h3 className="mt-8 text-lg font-semibold text-black">
+    <section className=" bg-gray-100 sm:py-10 lg:py-10">
+      <h3 className=" ml-10 text-lg font-semibold text-black">
         Resources Onsite
       </h3>
 
-      <p className="mt-4 text-base text-gray-600">
-        <CSVExportButton dataSet={"clock_data"} fileName={"currently_onsite"} />
+      <p className="mt-4 ml-12 mb-text-base text-gray-600">
+        <OnsiteExport />
       </p>
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 mt-4 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-5xl">
             Resources Onsite
@@ -104,12 +95,13 @@ const ActiveOnsitePersonnelDashboard = () => {
                       />
                     </svg>
                   </div>
+
                   <div className="min-w-0 ml-3 mr-auto">
                     <p className="text-base font-semibold text-black truncate">
                       {`${entry.firstname} ${entry.lastname}`}
                     </p>
                     <p className="text-sm text-gray-600 truncate">
-                      Active Untill {formatTime(entry.departureTime)}
+                      Active Untill {entry.departureTime}
                     </p>
                   </div>
                 </div>
@@ -126,15 +118,16 @@ const ActiveOnsitePersonnelDashboard = () => {
 
                     <span className="block text-sky-500"># {entry.phone}</span>
                   </p>
+
+                  {entry.role === "Vendor" && (
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
+                    >
+                      Check Out Vendor
+                    </button>
+                  )}
                 </blockquote>
-                {entry.role === "Vendor" && (
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
-                  >
-                    Check Out Vendor
-                  </button>
-                )}
               </div>
             </div>
           ))}

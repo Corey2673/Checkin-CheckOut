@@ -2,6 +2,8 @@
   "name": "journel",
   "version": "0.1.0",
   "private": true,
+  "author": "Corey Dubose",
+  "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -13,12 +15,14 @@
     "brace": "^0.11.1",
     "dayjs": "^1.11.11",
     "electron": "^31.1.0",
+    "electron-builder": "^24.13.3",
     "face-api.js": "^0.22.2",
     "markdown-to-jsx": "^7.4.7",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-ace": "^12.0.0",
     "react-csv": "^2.2.2",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
     "react-scripts": "5.0.1",
@@ -60,5 +64,15 @@
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4"
+  },
+  "build": {
+    "appId": "com.journel.app",
+   
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "electron.js"
+    ]
   }
 }

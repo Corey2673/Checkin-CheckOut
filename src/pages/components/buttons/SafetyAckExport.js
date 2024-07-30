@@ -1,43 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 
-const CAT2Export = () => {
-  const [clockData, setClockData] = useState([]);
+const SafetyAckExport = () => {
+  const [ackData, setAckData] = useState([]);
   const [selectedFields, setSelectedFields] = useState({
-    PAYROLL_NO: true,
-    LOGIN_ID: true,
-    SP_CODE: true,
-    NANCODE: true,
-    ACTIVITY: true,
-    ATT_TYPE: true,
-    CAL_DATE: true,
-    DURATION: true,
-    CUSTOMER_NAME: true,
+    firstname: true,
+    lastname: true,
+    siteLocation: true,
+    createAT: true,
+    questionText: true,
   });
 
   useEffect(() => {
     // Simulating data fetching and storing in localStorage
-    const data = JSON.parse(localStorage.getItem("clock_data"));
+    const data = JSON.parse(localStorage.getItem("acknowledgements"));
     if (data) {
-      setClockData(data);
+      setAckData(data);
     }
   }, []);
 
-  const FilterFTEUsers = () => {
-    const allUsers = clockData || [];
-    return allUsers.filter((user) => user.employmentstatus === "FTE");
-  };
-
-  const handleFieldChange = (e) => {
-    const { name, checked } = e.target;
-    setSelectedFields((prevFields) => ({
-      ...prevFields,
-      [name]: checked,
-    }));
-  };
-
   const getFilteredData = () => {
-    return FilterFTEUsers().map((user) => {
+    return ackData.map((user) => {
       const filteredUser = {};
       Object.keys(selectedFields).forEach((field) => {
         if (selectedFields[field]) {
@@ -71,7 +54,7 @@ const CAT2Export = () => {
       </div> */}
       <CSVLink
         data={getFilteredData()}
-        filename={"CAT2_FTE_REPORT.csv"}
+        filename={"SAFETY_ACK.csv"}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download
@@ -80,4 +63,4 @@ const CAT2Export = () => {
   );
 };
 
-export default CAT2Export;
+export default SafetyAckExport;

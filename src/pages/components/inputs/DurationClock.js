@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dateFormat from "../../utils/dateFormat";
 import autoID from "../../utils/autoID";
-import TimePicker from "react-time-picker";
 
 const DurationInput = (props) => {
   const { data, siteLocation } = props;
@@ -22,6 +21,15 @@ const DurationInput = (props) => {
     setEscorts(uniqueEscorts);
   }, []);
 
+  const handleTimeChange = (e) => {
+    const time24 = e.target.value;
+    const [hours, minutes] = time24.split(":");
+    const hours12 = hours % 12 || 12;
+    const amPm = hours >= 12 ? "PM" : "AM";
+    const formattedTime = `${hours12}:${minutes} ${amPm}`;
+    setDepartureTime(formattedTime);
+  };
+
   const handleSubmit = (
     userID,
     clockID,
@@ -41,10 +49,8 @@ const DurationInput = (props) => {
     NANCODE,
     ACTIVITY,
     ATT_TYPE,
-    LINE_NO,
-    OT_ID,
     CUSTOMER_NAME,
-    TEAM_NAME // Include escort in the handleSubmit parameters
+    PAYROLL_NO
   ) => {
     const clockData = {
       userID,
@@ -65,10 +71,8 @@ const DurationInput = (props) => {
       NANCODE,
       ACTIVITY,
       ATT_TYPE,
-      LINE_NO,
-      OT_ID,
       CUSTOMER_NAME,
-      TEAM_NAME, // Include escort in the clockData
+      PAYROLL_NO,
     };
 
     const existingClockActions =
@@ -125,35 +129,6 @@ const DurationInput = (props) => {
                           </div>
                         </div>
 
-                        {data.role === "Vendor" && (
-                          <div>
-                            <label
-                              htmlFor="escort"
-                              className="text-base font-medium text-gray-900"
-                            >
-                              Escort
-                            </label>
-                            <div className="mt-2.5">
-                              <select
-                                name="escort"
-                                value={escort}
-                                onChange={(e) => setEscort(e.target.value)}
-                                className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                                required
-                              >
-                                <option value="" disabled>
-                                  Select Escort
-                                </option>
-                                {escorts.map((escortName, index) => (
-                                  <option key={index} value={escortName}>
-                                    {escortName}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-                        )}
-
                         <div className="mt-6 mb-6">
                           <label
                             htmlFor="departure-time"
@@ -167,7 +142,7 @@ const DurationInput = (props) => {
                             placeholder="Expected Departure Time"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={departureTime}
-                            onChange={(e) => setDepartureTime(e.target.value)}
+                            onChange={handleTimeChange}
                           />
                         </div>
                       </>
@@ -196,10 +171,8 @@ const DurationInput = (props) => {
                               data.NANCODE,
                               data.ACTIVITY,
                               data.ATT_TYPE,
-                              data.LINE_NO,
-                              data.OT_ID,
                               data.CUSTOMER_NAME,
-                              data.TEAM_NAME // Pass escort to handleSubmit
+                              data.PAYROLL_NO
                             )
                           }
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

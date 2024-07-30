@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import dateFormat from "../../utils/dateFormat";
+import DateTimeSeparator from "../../utils/DateTimeSeparator";
+import DottedDate from "../../utils/DottedDate";
 
 const RegisterForm = (props) => {
   const { dataClock } = props;
   const [updatedData, setUpdatedData] = useState({
     timestampOUT: dateFormat(),
   });
-  console.log(dataClock);
 
   function updateClockData(userID, updatedData) {
     try {
@@ -18,10 +19,31 @@ const RegisterForm = (props) => {
       const userIndex = clockData.findIndex(
         (user) => user.userID === userID && user.timestampOUT === null
       );
+
       if (userIndex !== -1) {
+        // Ensure timestampIN and updatedData.timestampOUT are Date objects
+        const timestampIN = new Date(clockData[userIndex].timestampIN);
+        const timestampOUT = new Date(updatedData.timestampOUT);
+
+        // Calculate the duration in milliseconds
+        const duration = timestampOUT - timestampIN;
+
+        // Convert duration to desired format, e.g., minutes
+
+        const durationInMinutes = Math.floor((duration % 3600000) / 60000);
+        const durationInHours = Math.floor(duration / 3600000); // 1 hour = 3600000 milliseconds
+        const { date, time } = DateTimeSeparator(
+          clockData[userIndex].timestampIN
+        );
+
+        // Update the user data with the calculated duration
         clockData[userIndex] = {
           ...clockData[userIndex],
           ...updatedData,
+          CAL_DATE: DottedDate(date),
+          DURATION: durationInHours + "." + durationInMinutes,
+
+          // Store the duration
         };
       } else {
         console.warn(`User with ID ${userID} and timestampOUT null not found.`);
@@ -29,13 +51,11 @@ const RegisterForm = (props) => {
 
       // Save the updated data back to localStorage
       localStorage.setItem("clock_data", JSON.stringify(clockData));
-
-      console.log("Updated data:", updatedData);
-      console.log(clockData);
     } catch (error) {
       console.error("Error updating data:", error);
     }
 
+    // Optionally reload the window to reflect changes
     window.location.reload();
   }
 
@@ -67,7 +87,7 @@ const RegisterForm = (props) => {
                         onClick={() =>
                           updateClockData(dataClock[0].userID, updatedData)
                         }
-                        class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white transition-all duration-200 bg-zinc-600 border border-transparent rounded-full shadow-sm hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-700"
+                        class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
                         role="button"
                       >
                         Check Out
@@ -89,19 +109,6 @@ const RegisterForm = (props) => {
         </div>
       </div>
     </section>
-    // <div className="max-w-md mx-auto">
-    //   <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    //     <div className="flex items-center justify-center">
-    //       <button
-    //         type="button"
-    //         onClick={() => updateClockData(dataClock[0].userID, updatedData)}
-    //         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-    //       >
-    //         Submit
-    //       </button>
-    //     </div>
-    //   </form>
-    // </div>
   );
 };
 
