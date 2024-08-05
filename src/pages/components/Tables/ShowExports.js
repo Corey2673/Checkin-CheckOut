@@ -6,7 +6,6 @@ import SafetyAckExport from "../buttons/SafetyAckExport.js";
 import ShowDeletes from "../Tables/ShowDeletes.js";
 import RU11ExportButton from "../buttons/RU11ExportButton.js";
 import ProcessChangeExport from "../buttons/ProcessChangeExport.js";
-import RU11Component from "../";
 
 import ShowImports from "../Tables/ShowImports.js";
 
@@ -74,7 +73,7 @@ const App = () => {
       case "import":
         return <ShowImports />;
       case "delete":
-        return <RU11Component />;
+        return;
       //<ShowDeletes />;
       default:
         return null;
