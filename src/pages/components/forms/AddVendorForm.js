@@ -30,7 +30,7 @@ const VendorForm = () => {
     const existingClockActions =
       JSON.parse(localStorage.getItem("clock_data")) || [];
     const filteredEscorts = existingClockActions
-      .filter((entry) => entry.timestampOUT === null)
+      .filter((entry) => entry.timestampOUT === null && entry.role !== "Vendor")
       .map((entry) => entry.firstname + " " + entry.lastname);
     const uniqueEscorts = [...new Set(filteredEscorts)];
     setEscorts(uniqueEscorts);

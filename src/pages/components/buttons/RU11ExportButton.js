@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 
-const OnsiteExport = () => {
+const CAT2Export = () => {
   const [clockData, setClockData] = useState([]);
   const [selectedFields, setSelectedFields] = useState({
-    firstname: true,
-    lastname: true,
-    siteLocation: true,
-    role: true,
     timestampIN: true,
-    phone: true,
-    departureTime: true,
-    escort: true,
+    timestampOUT: true,
   });
 
   useEffect(() => {
@@ -24,19 +18,11 @@ const OnsiteExport = () => {
 
   const FilterFTEUsers = () => {
     const allUsers = clockData || [];
-    return allUsers.filter((user) => user.employmentstatus === "FTE");
-  };
-
-  const handleFieldChange = (e) => {
-    const { name, checked } = e.target;
-    setSelectedFields((prevFields) => ({
-      ...prevFields,
-      [name]: checked,
-    }));
+    return clockData;
   };
 
   const getFilteredData = () => {
-    return clockData.map((user) => {
+    return FilterFTEUsers().map((user) => {
       const filteredUser = {};
       Object.keys(selectedFields).forEach((field) => {
         if (selectedFields[field]) {
@@ -51,7 +37,7 @@ const OnsiteExport = () => {
     <div className="p-">
       <CSVLink
         data={getFilteredData()}
-        filename={"CURRENT_ONSITE.csv"}
+        filename={"RU11_Report.csv"}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download
@@ -60,4 +46,4 @@ const OnsiteExport = () => {
   );
 };
 
-export default OnsiteExport;
+export default CAT2Export;

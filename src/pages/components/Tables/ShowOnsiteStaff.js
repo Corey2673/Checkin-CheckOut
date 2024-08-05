@@ -76,7 +76,10 @@ const ActiveOnsitePersonnelDashboard = () => {
         </div>
         <div className="grid grid-cols-1 gap-6 px-4 mt-12 sm:px-0 xl:mt-20 lg:grid-cols-4 sm:grid-cols-2">
           {filteredEntries.map((entry, index) => (
-            <div key={index} className="overflow-hidden bg-white rounded-md">
+            <div
+              key={entry.userID}
+              className="overflow-hidden bg-white rounded-md"
+            >
               <div className="px-5 py-6">
                 <div className="flex items-center justify-between">
                   <div className="bg-green-500 rounded-full p-2">

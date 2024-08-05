@@ -9,6 +9,7 @@ const SafetyAckExport = () => {
     siteLocation: true,
     createAT: true,
     questionText: true,
+    comments: true,
   });
 
   useEffect(() => {

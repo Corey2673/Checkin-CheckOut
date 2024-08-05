@@ -17,6 +17,7 @@
     "electron": "^31.1.0",
     "electron-builder": "^24.13.3",
     "face-api.js": "^0.22.2",
+    "luxon": "^3.4.4",
     "markdown-to-jsx": "^7.4.7",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",
@@ -67,7 +68,6 @@
   },
   "build": {
     "appId": "com.journel.app",
-   
     "files": [
       "build/**/*",
       "node_modules/**/*",
