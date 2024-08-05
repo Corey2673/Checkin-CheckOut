@@ -3,11 +3,11 @@ import CSVExportButton from "../buttons/ExportButton.js";
 import CAT2Report from "../buttons/CAT2ExportButton.js";
 import OnsiteExport from "../buttons/OnsiteExport.js";
 import SafetyAckExport from "../buttons/SafetyAckExport.js";
-import ShowDeletes from "../Tables/ShowDeletes.js";
+import ShowDeletes from "./ShowDeletes.js";
 import RU11ExportButton from "../buttons/RU11ExportButton.js";
 import ProcessChangeExport from "../buttons/ProcessChangeExport.js";
 
-import ShowImports from "../Tables/ShowImports.js";
+import ShowImports from "./ShowDeletes.js";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("export");
