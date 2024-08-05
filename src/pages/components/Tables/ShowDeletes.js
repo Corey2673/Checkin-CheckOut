@@ -4,8 +4,6 @@ import CAT2Report from "../buttons/CAT2ExportButton.js";
 import OnsiteExport from "../buttons/OnsiteExport.js";
 import SafetyAckExport from "../buttons/SafetyAckExport.js";
 
-import ShowImports from "../Tables/ShowImports.js";
-
 const App = () => {
   const removeCollection = (data) => {
     localStorage.removeItem(data);
