@@ -7,7 +7,7 @@ import ShowDeletes from "./ShowDeletes.js";
 import RU11ExportButton from "../buttons/RU11ExportButton.js";
 import ProcessChangeExport from "../buttons/ProcessChangeExport.js";
 
-import ShowImports from "./ShowDeletes.js";
+import ShowImports from "./ShowImports.js";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("export");
@@ -73,8 +73,7 @@ const App = () => {
       case "import":
         return <ShowImports />;
       case "delete":
-        return;
-      //<ShowDeletes />;
+        return <ShowDeletes />;
       default:
         return null;
     }
