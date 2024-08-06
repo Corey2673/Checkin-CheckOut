@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import autoID from "../../utils/autoID";
 import dateFormat from "../../utils/dateFormat";
 import { format } from "date-fns";
+import PhoneInput from "../../utils/PhoneInput";
 
 const VendorForm = () => {
   const initialFormData = {
@@ -25,6 +26,8 @@ const VendorForm = () => {
   const [escorts, setEscorts] = useState([]); // State for escort dropdown options
   const [siteLocation, setSiteLocation] = useState([]); // State for site location dropdown options
   const [departureTime, setDepartureTime] = useState("");
+  const [phone, setPhone] = useState(""); // State for phone number
+  const [ePhone, setEPhone] = useState(""); // State for phone number
 
   useEffect(() => {
     const existingClockActions =
@@ -82,6 +85,8 @@ const VendorForm = () => {
       timestampIN: dateFormat(),
       siteLocation: selectedSiteLocation,
       escort: escort,
+      emergencycontactname: ePhone,
+      phone: phone,
     };
     const existingClockActions =
       JSON.parse(localStorage.getItem("clock_data")) || [];
@@ -166,11 +171,11 @@ const VendorForm = () => {
                   Contact Number
                 </label>
                 <div className="mt-2.5">
-                  <input
+                  <PhoneInput
                     type="text"
                     name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
+                    value={phone} // Bind value to state
+                    onChange={(e) => setPhone(e.target.value)} // Update phone state
                     placeholder="Enter your Contact Number"
                     className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                   />
@@ -208,7 +213,7 @@ const VendorForm = () => {
                     type="text"
                     name="emergencycontactname"
                     value={formData.emergencycontactname}
-                    onChange={handleChange}
+                    onChange={handleChange} // Update phone state
                     placeholder="Enter Emergency Contact Full Name"
                     className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                   />
@@ -223,12 +228,12 @@ const VendorForm = () => {
                   Emergency Contact Number
                 </label>
                 <div className="mt-2.5">
-                  <input
+                  <PhoneInput
                     type="text"
-                    name="emergencycontactnumber"
-                    value={formData.emergencycontactnumber}
-                    onChange={handleChange}
-                    placeholder="Enter Emergency Contact Number"
+                    name="emergencycontactname"
+                    value={ePhone}
+                    onChange={(e) => setEPhone(e.target.value)} // Update phone state
+                    placeholder="Enter Emergency Contact Full Name"
                     className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                   />
                 </div>

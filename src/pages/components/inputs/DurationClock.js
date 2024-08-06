@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dateFormat from "../../utils/dateFormat";
 import autoID from "../../utils/autoID";
+import PhoneInput from "../../utils/PhoneInput";
 
 const DurationInput = (props) => {
   const { data, siteLocation } = props;
@@ -117,9 +118,7 @@ const DurationInput = (props) => {
                             Contact Number
                           </label>
                           <div className="mt-2.5">
-                            <input
-                              type="tel" // Use type="tel" for phone numbers
-                              name="phone"
+                            <PhoneInput
                               value={phone} // Bind value to state
                               onChange={(e) => setPhone(e.target.value)} // Update phone state
                               placeholder="Enter your Contact Number"

@@ -19,10 +19,12 @@ const ActiveOnsitePersonnelDashboard = () => {
   // Save data to localStorage whenever onsiteClockData changes
 
   // Function to delete an entry by index
+
   const handleDelete = (index) => {
-    const updatedData = onsiteClockData.filter((_, i) => i !== index);
-    setOnsiteClockData(updatedData);
-    localStorage.setItem("clock_data", JSON.stringify(updatedData));
+    const updatedItems = [...onsiteClockData];
+    updatedItems.splice(index, 1); // Remove the item by index
+    setOnsiteClockData(updatedItems);
+    localStorage.setItem("clock_data", JSON.stringify(updatedItems));
   };
   // Filter the data
   const filteredEntries = onsiteClockData.filter(
@@ -76,10 +78,7 @@ const ActiveOnsitePersonnelDashboard = () => {
         </div>
         <div className="grid grid-cols-1 gap-6 px-4 mt-12 sm:px-0 xl:mt-20 lg:grid-cols-4 sm:grid-cols-2">
           {filteredEntries.map((entry, index) => (
-            <div
-              key={entry.userID}
-              className="overflow-hidden bg-white rounded-md"
-            >
+            <div className="overflow-hidden bg-white rounded-md">
               <div className="px-5 py-6">
                 <div className="flex items-center justify-between">
                   <div className="bg-green-500 rounded-full p-2">
@@ -108,7 +107,7 @@ const ActiveOnsitePersonnelDashboard = () => {
                     </p>
                   </div>
                 </div>
-                <blockquote className="mt-5">
+                <blockquote key={entry.userID} className="mt-5">
                   <p className="text-base text-gray-800">
                     {entry.siteLocation}
                     <br />
