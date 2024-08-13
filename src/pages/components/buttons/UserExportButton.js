@@ -1,27 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 
-const SafetyAckExport = () => {
-  const [ackData, setAckData] = useState([]);
+const OnsiteExport = () => {
+  const [clockData, setClockData] = useState([]);
   const [selectedFields, setSelectedFields] = useState({
-    processID: true,
-    text: true,
-    siteLocation: true,
+    userID: true,
+    firstname: true,
+    lastname: true,
     role: true,
-    comments: true,
+    employeestatus: true,
+    LOGIN_ID: true,
+    PAYROLL_NO: true,
+    NANCODE: true,
+
+    SP_CODE: true,
+    ACTIVITY: true,
+
+    badgeID: true,
+
     createAT: true,
   });
 
   useEffect(() => {
     // Simulating data fetching and storing in localStorage
-    const data = JSON.parse(localStorage.getItem("process_changes"));
+    const data = JSON.parse(localStorage.getItem("users"));
     if (data) {
-      setAckData(data);
+      setClockData(data);
     }
   }, []);
 
+  const handleFieldChange = (e) => {
+    const { name, checked } = e.target;
+    setSelectedFields((prevFields) => ({
+      ...prevFields,
+      [name]: checked,
+    }));
+  };
+
   const getFilteredData = () => {
-    return ackData.map((user) => {
+    return clockData.map((user) => {
       const filteredUser = {};
       Object.keys(selectedFields).forEach((field) => {
         if (selectedFields[field]) {
@@ -36,7 +53,7 @@ const SafetyAckExport = () => {
     <div className="p-">
       <CSVLink
         data={getFilteredData()}
-        filename={"process_changes.csv"}
+        filename={"USERS.csv"}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download
@@ -45,4 +62,4 @@ const SafetyAckExport = () => {
   );
 };
 
-export default SafetyAckExport;
+export default OnsiteExport;

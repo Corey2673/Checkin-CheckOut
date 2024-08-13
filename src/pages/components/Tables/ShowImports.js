@@ -4,14 +4,14 @@ import CAT2Report from "../buttons/CAT2ExportButton.js";
 import OnsiteExport from "../buttons/OnsiteExport.js";
 import SafetyAckExport from "../buttons/SafetyAckExport.js";
 import ImportCSVButton from "../buttons/ImportCSVButton.js"; // Import the new component
+import ImportUserCSV from "../buttons/ImportUserCSV.js";
 
 const App = () => {
   return (
     <section class="py-10 bg-white sm:py-16 lg:py-2">
       <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-12 text-center sm:grid-cols-2 md:grid-cols-3 lg:gap-y-16">
+        <div class="grid grid-cols-1 gap-12 text-center sm:grid-cols-2 md:grid-cols-2 lg:gap-y-16">
           <div>
-            <div class="relative flex items-center justify-center mx-auto"></div>
             <h3 class="mt-8 text-lg font-semibold text-black">
               Process Changes
             </h3>
@@ -23,11 +23,11 @@ const App = () => {
           <div>
             <div class="relative flex items-center justify-center mx-auto"></div>
             <h3 class="mt-8 text-lg font-semibold text-black">
-              Safety Acknowledgments
+              Safety Questions
             </h3>
 
             <p class="mt-4 text-base text-gray-600">
-              <ImportCSVButton dataSet={"safety_questions"} />{" "}
+              <ImportCSVButton dataSet={"safety_questions"} />
             </p>
           </div>
           <div>
@@ -35,7 +35,7 @@ const App = () => {
             <h3 class="mt-8 text-lg font-semibold text-black">Employee List</h3>
 
             <p class="mt-4 text-base text-gray-600">
-              <ImportCSVButton dataSet={"users"} />{" "}
+              <ImportUserCSV />
             </p>
           </div>
         </div>

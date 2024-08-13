@@ -272,6 +272,7 @@ const UserForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="firstname"
                     value={formData.firstname}
@@ -290,6 +291,7 @@ const UserForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="lastname"
                     value={formData.lastname}
@@ -310,6 +312,7 @@ const UserForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="PAYROLL_NO"
                     value={formData.PAYROLL_NO}
@@ -328,6 +331,7 @@ const UserForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="badgeID"
                     value={formData.badgeID}
@@ -357,6 +361,7 @@ const UserForm = () => {
                   <option value="Inventory">Inventory</option>
                   <option value="Manager">Manager</option>
                   <option value="Shop Floor">Shop Floor</option>
+                  <option value="Tech Bar">Tech Bar</option>
                 </select>
               </div>
               <div className="mb-4 py-4">
@@ -391,6 +396,7 @@ const UserForm = () => {
                     </label>
                     <div className="mt-2.5">
                       <input
+                        autoComplete="off"
                         type="text"
                         name="LOGIN_ID"
                         value={formData.LOGIN_ID}
@@ -410,6 +416,7 @@ const UserForm = () => {
                     </label>
                     <div className="mt-2.5">
                       <input
+                        autoComplete="off"
                         type="text"
                         name="SP_CODE"
                         value={formData.SP_CODE}
@@ -428,6 +435,7 @@ const UserForm = () => {
                     </label>
                     <div className="mt-2.5">
                       <input
+                        autoComplete="off"
                         type="text"
                         name="NANCODE"
                         value={formData.NANCODE}
@@ -447,6 +455,7 @@ const UserForm = () => {
                     </label>
                     <div className="mt-2.5">
                       <input
+                        autoComplete="off"
                         type="text"
                         name="ACTIVITY"
                         value={formData.ACTIVITY}
@@ -466,6 +475,7 @@ const UserForm = () => {
                     </label>
                     <div className="mt-2.5">
                       <input
+                        autoComplete="off"
                         type="text"
                         name="ATT_TYPE"
                         value={formData.ATT_TYPE}
@@ -481,15 +491,16 @@ const UserForm = () => {
                       htmlFor="CUSTOMER_NAME"
                       className="text-base font-medium text-gray-900"
                     >
-                      Team ID
+                      CUSTOMER_NAME
                     </label>
                     <div className="mt-2.5">
                       <input
+                        autoComplete="off"
                         type="text"
                         name="CUSTOMER_NAME"
                         value={formData.CUSTOMER_NAME}
                         onChange={handleChange}
-                        placeholder="Enter Team ID"
+                        placeholder="Enter CUSTOMER NAME"
                         className="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                       />
                     </div>

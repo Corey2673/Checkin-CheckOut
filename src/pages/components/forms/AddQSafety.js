@@ -98,6 +98,7 @@ const RegisterForm = () => {
                   <div className="sm:col-span-2">
                     <div className="mt-2.5 relative">
                       <textarea
+                        autoComplete="off"
                         name="text"
                         id="text"
                         placeholder="Enter Safety Question"

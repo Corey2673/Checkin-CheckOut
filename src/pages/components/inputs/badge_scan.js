@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ProfileComfirm from "../forms/ProfileComfirm";
 import Departure from "./departure";
 import "../../utils/styles.css";
+import Clock from "../../utils/Clock";
 
 const RegisterForm = (props) => {
   const [allUsers, setAllUsers] = useState([]);
@@ -62,6 +63,7 @@ const RegisterForm = (props) => {
         </h1>
         {/* <FaceRecognition /> */}
         <input
+          autoComplete="off"
           type="password"
           placeholder="Enter Badge ID"
           value={searchBadgeID}

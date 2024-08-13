@@ -136,6 +136,7 @@ const VendorForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="firstname"
                     value={formData.firstname}
@@ -154,6 +155,7 @@ const VendorForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="lastname"
                     value={formData.lastname}
@@ -192,6 +194,7 @@ const VendorForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="company"
                     value={formData.company}
@@ -210,6 +213,7 @@ const VendorForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="text"
                     name="emergencycontactname"
                     value={formData.emergencycontactname}
@@ -297,6 +301,7 @@ const VendorForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    autoComplete="off"
                     type="time"
                     name="departureTime"
                     value={departureTime}

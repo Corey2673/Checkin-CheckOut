@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div>
-      <div class="grid grid-cols-1 gap-12 text-center sm:grid-cols-2 md:grid-cols-3 lg:gap-y-16">
+      <div class="grid grid-cols-1 gap-12 text-center sm:grid-cols-2 md:grid-cols-2 lg:gap-y-16">
         <div>
           <div class="relative flex items-center justify-center mx-auto"></div>
           <h3 class="mt-8 text-lg font-semibold text-black">Process Change</h3>

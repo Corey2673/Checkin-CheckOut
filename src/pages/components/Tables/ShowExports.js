@@ -6,6 +6,10 @@ import SafetyAckExport from "../buttons/SafetyAckExport.js";
 import ShowDeletes from "./ShowDeletes.js";
 import RU11ExportButton from "../buttons/RU11ExportButton.js";
 import ProcessChangeExport from "../buttons/ProcessChangeExport.js";
+import ProcessAckExport from "../buttons/ProcessAckExport.js";
+import SafetyQuestionExport from "../buttons/SafetyQuestionExport.js";
+
+import UserExportButton from "../buttons/UserExportButton.js";
 
 import ShowImports from "./ShowImports.js";
 
@@ -16,15 +20,35 @@ const App = () => {
       case "export":
         return (
           <div>
-            <div class="grid grid-cols-1 gap-12 text-center sm:grid-cols-2 md:grid-cols-3 lg:gap-y-16">
+            <div class="grid grid-cols-1 gap-12 text-center sm:grid-cols-2 md:grid-cols-32lg:gap-y-16">
               <div>
                 <div class="relative flex items-center justify-center mx-auto"></div>
                 <h3 class="mt-8 text-lg font-semibold text-black">
-                  Process Change
+                  Process Changes
                 </h3>
 
                 <p class="mt-4 text-base text-gray-600">
                   <ProcessChangeExport />
+                </p>
+              </div>
+              <div>
+                <div class="relative flex items-center justify-center mx-auto"></div>
+                <h3 class="mt-8 text-lg font-semibold text-black">
+                  Process Change Acknowledgment
+                </h3>
+
+                <p class="mt-4 text-base text-gray-600">
+                  <ProcessAckExport />
+                </p>
+              </div>
+              <div>
+                <div class="relative flex items-center justify-center mx-auto"></div>
+                <h3 class="mt-8 text-lg font-semibold text-black">
+                  Safety Questions
+                </h3>
+
+                <p class="mt-4 text-base text-gray-600">
+                  <SafetyQuestionExport />
                 </p>
               </div>
 
@@ -65,6 +89,8 @@ const App = () => {
 
                 <p class="mt-4 text-base text-gray-600">
                   <CAT2Report />
+
+                  <UserExportButton />
                 </p>
               </div>
             </div>

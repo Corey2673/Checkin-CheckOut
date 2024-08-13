@@ -2,18 +2,18 @@
 import React from "react";
 import Papa from "papaparse";
 
-const ImportCSVButton = (props) => {
-  const { dataSet } = props;
+const ImportUserCSV = () => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     Papa.parse(file, {
       header: true,
       complete: (results) => {
-        const existingData = JSON.parse(localStorage.getItem(dataSet)) || [];
+        const existingData =
+          JSON.parse(localStorage.getItem("process_changes")) || [];
         const newData = [...existingData, ...results.data];
-        console.log(dataSet);
+
         console.log(results.data);
-        localStorage.setItem(dataSet, JSON.stringify(newData));
+        localStorage.setItem("process_changes", JSON.stringify(newData));
         alert("CSV imported successfully!");
       },
     });
@@ -21,18 +21,21 @@ const ImportCSVButton = (props) => {
 
   return (
     <div>
+      <button
+        onClick={() => document.getElementById("csvInputProcess").click()}
+        className="cursor-pointer text-blue-500"
+      >
+        Import CSV
+      </button>
       <input
+        id="csvInputUser"
         type="file"
         accept=".csv"
         onChange={handleFileUpload}
         style={{ display: "none" }}
-        id="csvInput"
       />
-      <label htmlFor="csvInput" className="cursor-pointer text-blue-500">
-        Import CSV
-      </label>
     </div>
   );
 };
 
-export default ImportCSVButton;
+export default ImportUserCSV;

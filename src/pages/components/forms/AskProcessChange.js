@@ -113,6 +113,7 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                       {question.comments === "Yes" && (
                         <div className="mt-4">
                           <input
+                            autoComplete="off"
                             type="text"
                             className="border border-gray-300 px-3 py-2 rounded-md"
                             placeholder="MM/YYYY"
