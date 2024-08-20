@@ -66,7 +66,7 @@ const UserForm = () => {
       // Update the user data
       const updatedUser = {
         ...formData,
-        badgeID: formData.PAYROLL_NO,
+
         createAT: dateFormat(),
       };
       const updatedUsers = [...users];
@@ -119,20 +119,23 @@ const UserForm = () => {
       </div>
     );
   };
+
   const handleDelete = (index) => {
     const updatedUsers = users.filter((_, i) => i !== index);
-    setUsers(updatedUsers);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
-    //window.location.reload();
+    setUsers(updatedUsers);
+    toggleShowUsers();
+    handleClear();
   };
 
   const handleEdit = (index) => {
+    handleClear();
     // Set form data to edit user
     const userToEdit = users[index];
     setFormData({ ...userToEdit });
     setEditing(true);
     setEditingIndex(index);
-    console.log(userToEdit);
+    toggleShowUsers();
   };
 
   const filteredUsers = filterRole
@@ -142,7 +145,7 @@ const UserForm = () => {
   return (
     <section className="bg-white">
       <div className="mb-4 ml-8 block text-base font-medium text-gray-900">
-        <label
+        {/* <label
           htmlFor="filterRole"
           className="block text-base font-medium text-gray-900"
         >
@@ -161,8 +164,8 @@ const UserForm = () => {
           <option value="Inventory">Inventory</option>
           <option value="Manager">Manager</option>
           <option value="Shop Floor">Shop Floor</option>
-        </select>
-        <hr className="mt-5 mb-1 border-gray-200" />
+        </select> 
+        <hr className="mt-5 mb-1 border-gray-200" />*/}
         <div className="justify-center mt-10 mb-4 ml-8 block">
           <button
             onClick={toggleShowUsers}
@@ -179,7 +182,7 @@ const UserForm = () => {
           <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="max-w-xl mx-auto text-center xl:max-w-3xl">
               <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-pj">
-                All User Accounts
+                All Employees
               </h2>
             </div>
           </div>
@@ -188,54 +191,34 @@ const UserForm = () => {
             <div class="w-full overflow-hidden">
               <div class="grid grid-cols-4 gap-3 mt-5 text-center lg:grid-cols-4 lg:gap-3 lg:mt-5 xl:mt-9 xl:gap-8">
                 {filteredUsers.map((user, index) => (
-                  <>
-                    <div
-                      key={user.userID}
-                      onClick={() => {
-                        handleEdit(index);
-                        toggleShowUsers();
-                      }}
-                      class="mt-1 lg:mt-4"
-                    >
-                      <div class="overflow-hidden bg-white shadow-lg rounded-xl">
-                        <div class="p-4 sm:p-15">
-                          <div class="inline-flex items-center justify-center w-10 h-10 mx-autorounded-full sm:w-20 sm:h-20">
-                            <div class="overflow-hidden rounded-xl">
-                              <div class="sm:p-">
-                                <div
-                                  class={
-                                    "inline-flex items-center justify-center w-15 h-10 mx-auto bg-blue-800 rounded-full sm:w-20 sm:h-20"
-                                  }
-                                >
-                                  <span class="text-white  text-lg sm:text-4xl"></span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mt-2 text-sm font-bold text-gray-900 sm:mt-3 sm:text-lg md:text-xl font-pj">
-                            {user.firstname} {user.lastname}
-                          </p>
-                          <p class="mt-2 text-sm  text-gray-900 sm:mt-3 sm:text-lg md:text-xl font-pj">
-                            {user.role}
-                          </p>
-                          <p class="mt-2 text-sm  text-gray-900 sm:mt-3 sm:text-lg md:text-xl font-pj">
-                            {user.employeestatus}
-                          </p>
-                          <p class="mt-2 text-sm  text-gray-900 sm:mt-3 sm:text-lg md:text-xl font-pj">
-                            PAYROLL_NO: {user.PAYROLL_NO}
-                          </p>
-                          <p class="mt-4 text-sm  text-gray-900 sm:mt-7 sm:text-lg md:text-xl font-pj">
-                            <button
-                              onClick={() => handleDelete(index)}
-                              className="inline-flex items-center justify-center px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-red-700 border border-transparent rounded-md focus:outline-none hover:bg-red-400 focus:bg-red-200"
-                            >
-                              Delete
-                            </button>
-                          </p>
+                  <div key={index} className="mt-1 lg:mt-4">
+                    <div className="overflow-hidden bg-white shadow-lg rounded-xl">
+                      <div className="p-4 sm:p-15">
+                        <div className="inline-flex items-center justify-center w-10 h-10 mx-auto rounded-full sm:w-20 sm:h-20 bg-blue-800">
+                          <span className="text-white text-lg sm:text-3xl">
+                            {user.firstname.charAt(0)} {user.lastname.charAt(0)}
+                          </span>
                         </div>
+                        <p className="mt-2 text-sm font-bold text-gray-900 sm:mt-3 sm:text-lg md:text-xl">
+                          {user.firstname} {user.lastname}
+                        </p>
+                        <p className="text-sm text-gray-900">{user.role}</p>
+
+                        <button
+                          onClick={() => handleEdit(index)}
+                          className="mt-2 mr-2 px-3 py-1 text-xs font-semibold text-white bg-yellow-500 rounded hover:bg-yellow-600"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(index)}
+                          className="mt-2 px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                        >
+                          Delete
+                        </button>
                       </div>
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
             </div>
@@ -523,6 +506,14 @@ const UserForm = () => {
                     Create Account
                   </button>
                 )}
+              </div>
+              <div>
+                <button
+                  onClick={handleClear}
+                  className="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-red-600 border border-transparent rounded-md focus:outline-none hover:bg-zinc-700 focus:bg-red-700"
+                >
+                  Delete
+                </button>
               </div>
               <div>
                 <button

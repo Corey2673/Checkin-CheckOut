@@ -9,11 +9,11 @@ const ImportUserCSV = () => {
       header: true,
       complete: (results) => {
         const existingData =
-          JSON.parse(localStorage.getItem("process_changes")) || [];
+          JSON.parse(localStorage.getItem("safety_questions")) || [];
         const newData = [...existingData, ...results.data];
 
         console.log(results.data);
-        localStorage.setItem("process_changes", JSON.stringify(newData));
+        localStorage.setItem("safety_questions", JSON.stringify(newData));
         alert("CSV imported successfully!");
       },
     });
@@ -22,13 +22,13 @@ const ImportUserCSV = () => {
   return (
     <div>
       <button
-        onClick={() => document.getElementById("csvInputProcess").click()}
+        onClick={() => document.getElementById("csvInputSafety").click()}
         className="cursor-pointer text-blue-500"
       >
         Import CSV
       </button>
       <input
-        id="csvInputUser"
+        id="csvInputSafety"
         type="file"
         accept=".csv"
         onChange={handleFileUpload}

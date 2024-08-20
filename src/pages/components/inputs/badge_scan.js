@@ -53,17 +53,16 @@ const RegisterForm = (props) => {
   return (
     <div className="w-full py-4 flex flex-col items-center justify-center space-y-4">
       <div className="text-center w-full max-w-md px-4">
-        <img
+        {/* <img
           src="/auth/m3.png"
           alt="Badge"
           className="w-32 h-32 mb-4 mx-auto spin-horizontal"
-        />
+        /> */}
         <h1 className="text-4xl font-extrabold mb-4 text-white">
           Safety Check In
         </h1>
         {/* <FaceRecognition /> */}
         <input
-          autoComplete="off"
           type="password"
           placeholder="Enter Badge ID"
           value={searchBadgeID}

@@ -5,6 +5,8 @@ import OnsiteExport from "../buttons/OnsiteExport.js";
 import SafetyAckExport from "../buttons/SafetyAckExport.js";
 import ImportCSVButton from "../buttons/ImportCSVButton.js"; // Import the new component
 import ImportUserCSV from "../buttons/ImportUserCSV.js";
+import ImportSQuestionCSV from "../buttons/ImportSQuestionCSV.js";
+import ImportPChangeCSV from "../buttons/ImportPChangeCSV.js";
 
 const App = () => {
   return (
@@ -17,7 +19,7 @@ const App = () => {
             </h3>
 
             <p class="mt-4 text-base text-gray-600">
-              <ImportCSVButton dataSet={"process_changes"} />{" "}
+              <ImportPChangeCSV />{" "}
             </p>
           </div>
           <div>
@@ -27,7 +29,7 @@ const App = () => {
             </h3>
 
             <p class="mt-4 text-base text-gray-600">
-              <ImportCSVButton dataSet={"safety_questions"} />
+              <ImportSQuestionCSV />
             </p>
           </div>
           <div>

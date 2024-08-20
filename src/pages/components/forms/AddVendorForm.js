@@ -336,7 +336,7 @@ const VendorForm = () => {
 
         <div className="flex justify-center px-4 py-10 sm:py-16 lg:py-24 bg-gray-50 sm:px-6 lg:px-8">
           <div>
-            <img className="w-full mx-auto" src="/auth/m3.png" alt="" />
+            {/* <img className="w-full mx-auto" src="/auth/m3.png" alt="" /> */}
 
             <div className="w-full max-w-md mx-auto xl:max-w-xl">
               <h3 className="text-2xl font-bold text-center text-black">

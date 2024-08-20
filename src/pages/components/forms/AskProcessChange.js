@@ -34,7 +34,8 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
     questionTitle,
     lastname,
     questionText,
-    createAT
+    createAT,
+    commentValue
   ) => {
     const newAcknowledgment = {
       userID,
@@ -46,6 +47,7 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
       questionTitle,
       questionText,
       createAT,
+      commentValue,
     };
 
     // Update acknowledgments state
@@ -113,8 +115,8 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                       {question.comments === "Yes" && (
                         <div className="mt-4">
                           <input
-                            autoComplete="off"
-                            type="text"
+                            type="month"
+                            dateFormat="MM/YYYY"
                             className="border border-gray-300 px-3 py-2 rounded-md"
                             placeholder="MM/YYYY"
                             value={question.commentValue || ""}
@@ -141,7 +143,8 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                               question.title,
                               data.lastname,
                               question.text,
-                              dateFormat()
+                              dateFormat(),
+                              question.commentValue
                             )
                           }
                         >

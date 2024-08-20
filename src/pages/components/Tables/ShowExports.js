@@ -89,8 +89,6 @@ const App = () => {
 
                 <p class="mt-4 text-base text-gray-600">
                   <CAT2Report />
-
-                  <UserExportButton />
                 </p>
               </div>
             </div>
