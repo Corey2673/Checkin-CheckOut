@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DurationClock from "../inputs/DurationClock";
+
 import dateFormat from "../../utils/dateFormat";
 import AskProcessChange from "../forms/AskProcessChange";
 
@@ -8,9 +8,11 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
   const [acknowledgments, setAcknowledgments] = useState([]);
   const [signature, setSignature] = useState("");
   const [acknowledgementData, setAcknowledgementData] = useState([]);
+  const [declineReason, setDeclineReason] = useState({});
+  const [showReasonInput, setShowReasonInput] = useState({});
 
   useEffect(() => {
-    // Function to fetch data from LocalStorage
+    // Fetch data from LocalStorage
     try {
       const ack_data = localStorage.getItem("acknowledgements");
       const question_data = localStorage.getItem("safety_questions");
@@ -49,6 +51,7 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
       questionText,
       createAT,
       commentValue,
+      acknowledgment: "Accepted",
     };
 
     // Update acknowledgments state
@@ -56,8 +59,41 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
     setSignature("");
     setAcknowledgementData([...acknowledgementData, questionID]);
     const updatedAck = [...acknowledgments, newAcknowledgment];
-    // Update LocalStorage after acknowledgment
     localStorage.setItem("acknowledgements", JSON.stringify(updatedAck));
+  };
+
+  const declineQuestion = (
+    userID,
+    questionID,
+    firstname,
+    questionTitle,
+    lastname,
+    questionText,
+    createAT,
+    reason
+  ) => {
+    const newDecline = {
+      userID,
+      questionID,
+      lastname,
+      dateFormat,
+      siteLocation,
+      firstname,
+      questionTitle,
+      questionText,
+      createAT,
+      reason,
+      acknowledgment: "Declined",
+    };
+
+    // Handle decline logic here (store or log as needed)
+    setAcknowledgments([...acknowledgments, newDecline]);
+    setShowReasonInput({ ...showReasonInput, [questionID]: false });
+    setAcknowledgementData([...acknowledgementData, questionID]);
+    localStorage.setItem(
+      "acknowledgements",
+      JSON.stringify([...acknowledgments, newDecline])
+    );
   };
 
   const getUnacknowledgedQuestions = () => {
@@ -110,9 +146,6 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                 {!acknowledgementData.includes(question.questionID) && (
                   <div className="divide-y divide-gray-200 -my-9">
                     <div className="py-9">
-                      {/* <p className="text-xl font-semibold text-black">
-                        How do you provide support?
-                      </p> */}
                       <p className="mt-3 text-base text-gray-600">
                         {question.text}
                       </p>
@@ -125,7 +158,6 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                             placeholder="MM/YYYY"
                             value={question.commentValue || ""}
                             onChange={(e) => {
-                              // Handle input change
                               const updatedQuestions = questions.map((q) =>
                                 q.questionID === question.questionID
                                   ? { ...q, commentValue: e.target.value }
@@ -136,25 +168,75 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                           />
                         </div>
                       )}
-                      <div className="flex items-center mt-5">
-                        <button
-                          className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-                          onClick={() =>
-                            acknowledgeQuestion(
-                              data.userID,
-                              question.questionID,
-                              data.firstname,
-                              question.title,
-                              data.lastname,
-                              question.text,
-                              dateFormat(),
-                              question.commentValue
-                            )
-                          }
-                        >
-                          Acknowledge
-                        </button>
-                      </div>
+                      {!showReasonInput[question.questionID] && (
+                        <div className="flex items-center mt-5 space-x-4">
+                          <button
+                            className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
+                            onClick={() =>
+                              acknowledgeQuestion(
+                                data.userID,
+                                question.questionID,
+                                data.firstname,
+                                question.title,
+                                data.lastname,
+                                question.text,
+                                dateFormat(),
+                                question.commentValue
+                              )
+                            }
+                          >
+                            Acknowledge
+                          </button>
+
+                          <button
+                            className="bg-red-500 text-white rounded-md px-4 py-2 hover:bg-red-600"
+                            onClick={() =>
+                              setShowReasonInput({
+                                ...showReasonInput,
+                                [question.questionID]:
+                                  !showReasonInput[question.questionID],
+                              })
+                            }
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      )}
+                      {showReasonInput[question.questionID] && (
+                        <div className="mt-4">
+                          <textarea
+                            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                            placeholder="State the reason for declining"
+                            value={declineReason[question.questionID] || ""}
+                            onChange={(e) =>
+                              setDeclineReason({
+                                ...declineReason,
+                                [question.questionID]: e.target.value,
+                              })
+                            }
+                          />
+
+                          {declineReason[question.questionID] && (
+                            <button
+                              className="mt-2 bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-600"
+                              onClick={() =>
+                                declineQuestion(
+                                  data.userID,
+                                  question.questionID,
+                                  data.firstname,
+                                  question.title,
+                                  data.lastname,
+                                  question.text,
+                                  dateFormat(),
+                                  declineReason[question.questionID]
+                                )
+                              }
+                            >
+                              Submit Reason & Next
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -163,74 +245,6 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
           </div>
         </div>
       </section>
-
-      // <section class="py-12 bg-white sm:py- lg:py-">
-      //   <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-      //     <div class="text-center">
-      //       <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl mb-4 font-pj">
-      //         Acknowledgments for {data.firstname} {data.lastname}
-      //       </h2>
-      //     </div>
-
-      //     {unacknowledgedQuestions.map((question) => (
-      //       <div
-      //         key={question.questionID}
-      //         className="grid max-w-lg grid-cols-3 gap-10 mx-auto md:max-w-4xl md:grid-cols-1 md:gap-x-16"
-      //       >
-      //         <div>
-      //           {!acknowledgementData.includes(question.questionID) && (
-      //             <div className="space-y-10">
-      //               <div>
-      //                 <blockquote className="py-6 bg-gray-100 rounded-2xl px-7">
-      //                   <p className="text-lg font-normal leading-relaxed text-gray-900 font-pj">
-      //                     {question.text}
-      //                   </p>
-      //                   {question.comments === "Yes" && (
-      //                     <div className="mt-4">
-      //                       <input
-      //                         type="text"
-      //                         className="border border-gray-300 px-3 py-2 rounded-md"
-      //                         placeholder="MM/YYYY"
-      //                         value={question.commentValue || ""}
-      //                         onChange={(e) => {
-      //                           // Handle input change
-      //                           const updatedQuestions = questions.map((q) =>
-      //                             q.questionID === question.questionID
-      //                               ? { ...q, commentValue: e.target.value }
-      //                               : q
-      //                           );
-      //                           setQuestions(updatedQuestions);
-      //                         }}
-      //                       />
-      //                     </div>
-      //                   )}
-      //                   <div className="flex items-center mt-5">
-      //                     <button
-      //                       className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-      //                       onClick={() =>
-      //                         acknowledgeQuestion(
-      //                           data.userID,
-      //                           question.questionID,
-      //                           data.firstname,
-      //                           question.title,
-      //                           data.lastname,
-      //                           question.text,
-      //                           dateFormat()
-      //                         )
-      //                       }
-      //                     >
-      //                       Acknowledge
-      //                     </button>
-      //                   </div>
-      //                 </blockquote>
-      //               </div>
-      //             </div>
-      //           )}
-      //         </div>
-      //       </div>
-      //     ))}
-      //   </div>
-      // </section>
     );
   }
 };

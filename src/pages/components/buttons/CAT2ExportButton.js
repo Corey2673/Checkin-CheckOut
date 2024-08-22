@@ -3,6 +3,7 @@ import { CSVLink } from "react-csv";
 
 const CAT2Export = () => {
   const [clockData, setClockData] = useState([]);
+
   const [selectedFields, setSelectedFields] = useState({
     PAYROLL_NO: true,
     LOGIN_ID: true,
@@ -13,6 +14,8 @@ const CAT2Export = () => {
     CAL_DATE: true,
     DURATION: true,
     CUSTOMER_NAME: true,
+    timestampIN: true,
+    timestampOut: true,
   });
 
   useEffect(() => {

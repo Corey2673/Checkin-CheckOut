@@ -4,14 +4,11 @@ import { CSVLink } from "react-csv";
 const OnsiteExport = () => {
   const [clockData, setClockData] = useState([]);
   const [selectedFields, setSelectedFields] = useState({
+    PAYROLL_NO: true,
     firstname: true,
     lastname: true,
-    siteLocation: true,
-    role: true,
     timestampIN: true,
-    phone: true,
-    departureTime: true,
-    escort: true,
+    timestampOUT: true,
   });
 
   useEffect(() => {
@@ -70,7 +67,7 @@ const OnsiteExport = () => {
       </div> */}
       <CSVLink
         data={getFilteredData()}
-        filename={"CURRENT_ONSITE.csv"}
+        filename={"DURATION_DATA.csv"}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download

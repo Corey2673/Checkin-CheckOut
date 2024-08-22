@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import CSVExportButton from "../buttons/ExportButton.js";
+
 import CAT2Report from "../buttons/CAT2ExportButton.js";
-import OnsiteExport from "../buttons/OnsiteExport.js";
+
 import SafetyAckExport from "../buttons/SafetyAckExport.js";
 import ShowDeletes from "./ShowDeletes.js";
 import RU11ExportButton from "../buttons/RU11ExportButton.js";
@@ -10,6 +10,7 @@ import ProcessAckExport from "../buttons/ProcessAckExport.js";
 import SafetyQuestionExport from "../buttons/SafetyQuestionExport.js";
 
 import UserExportButton from "../buttons/UserExportButton.js";
+import CheckInOutExport from "../buttons/CheckInOutExport.js";
 
 import ShowImports from "./ShowImports.js";
 
@@ -89,6 +90,24 @@ const App = () => {
 
                 <p class="mt-4 text-base text-gray-600">
                   <CAT2Report />
+                </p>
+              </div>
+
+              <div>
+                <div class="relative flex items-center justify-center mx-auto"></div>
+                <h3 class="mt-8 text-lg font-semibold text-black">Users</h3>
+
+                <p class="mt-4 text-base text-gray-600">
+                  <UserExportButton />
+                </p>
+              </div>
+
+              <div>
+                <div class="relative flex items-center justify-center mx-auto"></div>
+                <h3 class="mt-8 text-lg font-semibold text-black">Durations</h3>
+
+                <p class="mt-4 text-base text-gray-600">
+                  <CheckInOutExport />
                 </p>
               </div>
             </div>

@@ -5,8 +5,9 @@ import dateFormat from "../../utils/dateFormat";
 const UserAcknowledgementForm = ({ data, siteLocation }) => {
   const [questions, setQuestions] = useState([]);
   const [acknowledgments, setAcknowledgments] = useState([]);
-  const [signature, setSignature] = useState("");
   const [acknowledgementData, setAcknowledgementData] = useState([]);
+  const [declineReason, setDeclineReason] = useState({});
+  const [showDeclineInput, setShowDeclineInput] = useState({});
 
   useEffect(() => {
     // Function to fetch data from LocalStorage
@@ -26,6 +27,39 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
       console.error("Error fetching acknowledgement data:", error);
     }
   }, []);
+
+  const declineQuestion = (
+    userID,
+    processID,
+    firstname,
+    questionTitle,
+    lastname,
+    questionText,
+    createAT,
+    reason
+  ) => {
+    const newDecline = {
+      userID,
+      processID,
+      lastname,
+      dateFormat,
+      siteLocation,
+      firstname,
+      questionTitle,
+      questionText,
+      createAT,
+      reason,
+      acknowledgment: "Declined",
+    };
+
+    // Update the localStorage with declined data
+    const updatedAck = [...acknowledgments, newDecline];
+    localStorage.setItem("change_acknowledgements", JSON.stringify(updatedAck));
+    setAcknowledgments(updatedAck);
+    setShowDeclineInput({ ...showDeclineInput, [processID]: false });
+    setDeclineReason({ ...declineReason, [processID]: "" });
+    setAcknowledgementData([...acknowledgementData, processID]);
+  };
 
   const acknowledgeQuestion = (
     userID,
@@ -48,25 +82,22 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
       questionText,
       createAT,
       commentValue,
+      acknowledgment: "Accepted",
     };
 
     // Update acknowledgments state
-    setAcknowledgments([...acknowledgments, newAcknowledgment]);
-    setSignature("");
-    setAcknowledgementData([...acknowledgementData, processID]);
     const updatedAck = [...acknowledgments, newAcknowledgment];
+    setAcknowledgments(updatedAck);
+    setAcknowledgementData([...acknowledgementData, processID]);
     // Update LocalStorage after acknowledgment
     localStorage.setItem("change_acknowledgements", JSON.stringify(updatedAck));
   };
 
   const getUnacknowledgedQuestions = () => {
-    const acknowledgedQuestions = acknowledgementData.filter(
-      (ack) => ack.userID === data.userID
-    );
-
     return questions.filter((question) => {
-      const acknowledged = acknowledgedQuestions.some(
-        (ack) => ack.processID === question.processID
+      const acknowledged = acknowledgments.some(
+        (ack) =>
+          ack.processID === question.processID && ack.userID === data.userID
       );
 
       const isRoleMatch =
@@ -82,7 +113,7 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
     });
   };
 
-  const unacknowledgedQuestions = getUnacknowledgedQuestions(data.userID);
+  const unacknowledgedQuestions = getUnacknowledgedQuestions();
 
   const allQuestionsAcknowledged =
     unacknowledgedQuestions.filter(
@@ -106,9 +137,6 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                 <div className="divide-y divide-gray-200 -my-9">
                   {!acknowledgementData.includes(question.processID) && (
                     <div className="py-9">
-                      {/* <p className="text-xl font-semibold text-black">
-                        Date of Change {question.createAT}
-                      </p> */}
                       <p className="mt-3 text-base text-gray-600">
                         {question.text}
                       </p>
@@ -132,25 +160,74 @@ const UserAcknowledgementForm = ({ data, siteLocation }) => {
                           />
                         </div>
                       )}
-                      <div className="flex items-center mt-5">
-                        <button
-                          className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-                          onClick={() =>
-                            acknowledgeQuestion(
-                              data.userID,
-                              question.processID,
-                              data.firstname,
-                              question.title,
-                              data.lastname,
-                              question.text,
-                              dateFormat(),
-                              question.commentValue
-                            )
-                          }
-                        >
-                          Acknowledge
-                        </button>
-                      </div>
+                      {!showDeclineInput[question.processID] && (
+                        <div className="flex items-center mt-5 space-x-4">
+                          <button
+                            className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
+                            onClick={() =>
+                              acknowledgeQuestion(
+                                data.userID,
+                                question.processID,
+                                data.firstname,
+                                question.title,
+                                data.lastname,
+                                question.text,
+                                dateFormat(),
+                                question.commentValue
+                              )
+                            }
+                          >
+                            Acknowledge
+                          </button>
+
+                          <button
+                            className="bg-red-500 text-white rounded-md px-4 py-2 hover:bg-red-600"
+                            onClick={() =>
+                              setShowDeclineInput({
+                                ...showDeclineInput,
+                                [question.processID]:
+                                  !showDeclineInput[question.processID],
+                              })
+                            }
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      )}
+                      {showDeclineInput[question.processID] && (
+                        <div className="mt-4">
+                          <textarea
+                            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+                            placeholder="State the reason for declining"
+                            value={declineReason[question.processID] || ""}
+                            onChange={(e) =>
+                              setDeclineReason({
+                                ...declineReason,
+                                [question.processID]: e.target.value,
+                              })
+                            }
+                          />
+                          {declineReason[question.processID] && (
+                            <button
+                              className="mt-2 bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-600"
+                              onClick={() =>
+                                declineQuestion(
+                                  data.userID,
+                                  question.processID,
+                                  data.firstname,
+                                  question.title,
+                                  data.lastname,
+                                  question.text,
+                                  dateFormat(),
+                                  declineReason[question.processID]
+                                )
+                              }
+                            >
+                              Submit Reason & Next
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
