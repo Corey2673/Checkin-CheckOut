@@ -23,12 +23,12 @@ const DurationInput = (props) => {
   }, []);
 
   const handleTimeChange = (e) => {
-    const time24 = e.target.value;
+    const time24 = e;
     const [hours, minutes] = time24.split(":");
     const hours12 = hours % 12 || 12;
     const amPm = hours >= 12 ? "PM" : "AM";
-    const formattedTime = `${hours12}:${minutes} ${amPm}`;
-    setDepartureTime(formattedTime);
+
+    return `${hours12}:${minutes} ${amPm}`;
   };
 
   const handleSubmit = (
@@ -83,7 +83,7 @@ const DurationInput = (props) => {
 
     setPhone(""); // Reset phone state
     setEscort(""); // Reset escort state
-    console.log(clockData);
+
     window.location.reload();
   };
 
@@ -141,7 +141,7 @@ const DurationInput = (props) => {
                             placeholder="Expected Departure Time"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={departureTime}
-                            onChange={handleTimeChange}
+                            onChange={(e) => setDepartureTime(e.target.value)}
                           />
                         </div>
                       </>
@@ -162,9 +162,9 @@ const DurationInput = (props) => {
                               null,
                               data.employeestatus,
                               phone,
-                              departureTime,
+                              handleTimeChange(departureTime),
                               escort,
-                              data.company,
+                              data.COMPANY,
                               data.LOGIN_ID,
                               data.SP_CODE,
                               data.NANCODE,

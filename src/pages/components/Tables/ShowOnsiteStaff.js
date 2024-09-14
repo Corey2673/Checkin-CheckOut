@@ -20,9 +20,16 @@ const ActiveOnsitePersonnelDashboard = () => {
 
   // Function to delete an entry by index
 
-  const handleDelete = (index) => {
-    const updatedItems = [...onsiteClockData];
-    updatedItems.splice(index, 1); // Remove the item by index
+  const handleDelete = (userID) => {
+    // Retrieve data from localStorage
+    const storedData = JSON.parse(localStorage.getItem("clock_data")) || [];
+
+    // Filter out the data matching the userID
+    const updatedItems = onsiteClockData.filter(
+      (item) => item.userID !== userID
+    );
+
+    // Update state and localStorage with the filtered data
     setOnsiteClockData(updatedItems);
     localStorage.setItem("clock_data", JSON.stringify(updatedItems));
   };
@@ -123,7 +130,7 @@ const ActiveOnsitePersonnelDashboard = () => {
 
                   {entry.role === "Vendor" && (
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(entry.userID)}
                       className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
                     >
                       Check Out Vendor

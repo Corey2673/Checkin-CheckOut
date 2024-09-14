@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import CAT2Report from "../buttons/CAT2ExportButton.js";
 
 import SafetyAckExport from "../buttons/SafetyAckExport.js";

@@ -120,12 +120,16 @@ const UserForm = () => {
     );
   };
 
-  const handleDelete = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
-    toggleShowUsers();
-    handleClear();
+  const handleDelete = (userID) => {
+    // Retrieve data from localStorage
+    const storedData = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Filter out the data matching the userID
+    const updatedItems = users.filter((item) => item.userID !== userID);
+
+    // Update state and localStorage with the filtered data
+    setUsers(updatedItems);
+    localStorage.setItem("users", JSON.stringify(updatedItems));
   };
 
   const handleEdit = (index) => {
@@ -145,27 +149,6 @@ const UserForm = () => {
   return (
     <section className="bg-white">
       <div className="mb-4 ml-8 block text-base font-medium text-gray-900">
-        {/* <label
-          htmlFor="filterRole"
-          className="block text-base font-medium text-gray-900"
-        >
-          Filter by Role:
-        </label>
-        <select
-          id="filterRole"
-          name="filterRole"
-          value={filterRole}
-          onChange={(e) => setFilterRole(e.target.value)}
-          className="border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        >
-          <option value="">All</option>
-          <option value="Client Team">Client Team</option>
-          <option value="Control Room">Control Room</option>
-          <option value="Inventory">Inventory</option>
-          <option value="Manager">Manager</option>
-          <option value="Shop Floor">Shop Floor</option>
-        </select> 
-        <hr className="mt-5 mb-1 border-gray-200" />*/}
         <div className="justify-center mt-10 mb-4 ml-8 block">
           <button
             onClick={toggleShowUsers}
@@ -176,8 +159,30 @@ const UserForm = () => {
         </div>
       </div>
       {showUsers && (
-        <section class=" bg-gray-50 sm:py-16 lg:py-20">
-          <div className="mt-10 "></div>
+        <section class=" bg-gray-50 sm:py-10 lg:py-10">
+          <div className="ml-10 ">
+            <label
+              htmlFor="filterRole"
+              className="block text-base font-medium text-gray-900"
+            >
+              Filter by Role:
+            </label>
+            <select
+              id="filterRole"
+              name="filterRole"
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+              className="border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              <option value="">All</option>
+              <option value="Client Team">Client Team</option>
+              <option value="Control Room">Control Room</option>
+              <option value="Inventory">Inventory</option>
+              <option value="Manager">Manager</option>
+              <option value="Shop Floor">Shop Floor</option>
+            </select>
+            <hr className="mt-5 mb-1 border-gray-200" />
+          </div>
 
           <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="max-w-xl mx-auto text-center xl:max-w-3xl">
@@ -211,7 +216,7 @@ const UserForm = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(index)}
+                          onClick={() => handleDelete(user.userID)}
                           className="mt-2 px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                         >
                           Delete

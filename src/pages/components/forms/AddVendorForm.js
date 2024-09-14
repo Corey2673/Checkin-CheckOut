@@ -301,7 +301,6 @@ const VendorForm = () => {
                 </label>
                 <div className="mt-2.5">
                   <input
-                    autoComplete="off"
                     type="time"
                     name="departureTime"
                     value={departureTime}

@@ -15,11 +15,16 @@ const OnsiteExport = () => {
   });
 
   useEffect(() => {
-    // Simulating data fetching and storing in localStorage
+    // Retrieve data from localStorage
     const data = JSON.parse(localStorage.getItem("clock_data"));
-    if (data) {
-      setClockData(data);
-    }
+
+    // Filter data where timestampOUT is null
+    const filteredData = data
+      ? data.filter((item) => item.timestampOUT === null)
+      : [];
+
+    // Set the filtered data
+    setClockData(filteredData);
   }, []);
 
   const FilterFTEUsers = () => {

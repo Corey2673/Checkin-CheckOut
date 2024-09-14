@@ -13,9 +13,7 @@ const CAT2Export = () => {
     ATT_TYPE: true,
     CAL_DATE: true,
     DURATION: true,
-    CUSTOMER_NAME: true,
-    timestampIN: true,
-    timestampOut: true,
+    // CUSTOMER_NAME: true,
   });
 
   useEffect(() => {
